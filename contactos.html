@@ -40,56 +40,83 @@
 </style>
 </head>
 <body>
-<div id="wrapper">
-    <div id="header">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
-        <div id="titulo-container">
-            <h1>INCOREA CABLES</h1>
-            <p id="sub-txt">CONTACTOS</p>
-        </div>
+<div class="info-side">
+
+    <h3>NUESTRA UBICACIÓN</h3>
+
+    <p>
+        Quito, Ecuador<br>
+        Edificio Incorea Cables
+    </p>
+
+    <h3>SÍGUENOS</h3>
+
+    <div class="social-icons">
+
+        <a href="https://www.facebook.com/incoreacablesec/" target="_blank" title="Facebook">
+            <i class="fab fa-facebook"></i>
+        </a>
+
+        <a href="https://www.instagram.com/incoreacables/" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://www.tiktok.com/@incoreacables/" target="_blank" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
+
     </div>
-    <div id="nav">
-        <a href="index.html">INICIO</a>
-        <a href="directorio.html">DIRECTORIO</a>
-         <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-        <a href="global.html">GLOBAL</a>
-        <a href="otros.html">OTROS</a>
-        <a href="contactos.html">CONTACTOS</a>
-    </div>
-    <div class="contacto-wrapper">
-        <div class="form-side">
-            <div class="input-group">
-                <label>Nombre Completo *</label>
-                <input type="text" id="nom">
-            </div>
-            <div class="input-group">
-                <label>Correo Electrónico *</label>
-                <input type="email" id="eml">
-            </div>
-            <div class="input-group">
-                <label>Empresa</label>
-                <input type="text" id="emp">
-            </div>
-            <div class="input-group">
-                <label>Mensaje *</label>
-                <textarea id="msg" rows="5"></textarea>
-            </div>
-            <button class="btn-submit" onclick="enviar()">Enviar Mensaje</button>
+
+    <h3 style="margin-top:30px;">TELÉFONO</h3>
+
+    <p>
+        +593 989290517<br>
+        info@incorea.com
+    </p>
+
+    <h3>HORARIOS</h3>
+
+    <p>
+        Lunes - Viernes<br>
+        08:00 AM - 18:00 PM
+    </p>
+
+    <div style="
+        margin-top:35px;
+        background:linear-gradient(145deg,#101820,#16232d);
+        border:1px solid #1abc9c33;
+        border-radius:10px;
+        overflow:hidden;
+        box-shadow:0 0 20px rgba(0,0,0,0.4);
+    ">
+
+        <img src="publicidad.jpg" style="width:100%; display:block;">
+
+        <div style="padding:18px;">
+
+            <h2 style="
+                color:#1abc9c;
+                margin:0 0 10px;
+                font-size:22px;
+            ">
+                Especialistas en cables eléctricos desde el 2000
+            </h2>
+
+            <p style="
+                color:#ccc;
+                line-height:1.7;
+                font-size:14px;
+                margin:0;
+            ">
+                Incorea Cables ofrece soluciones industriales de alta calidad
+                para proyectos eléctricos, comerciales y corporativos,
+                brindando innovación, seguridad y confianza en cada conexión.
+            </p>
+
         </div>
-        <div class="info-side">
-            <h3>NUESTRA UBICACIÓN</h3>
-            <p>Quito, Ecuador<br>Edificio Incorea Cables</p>
-            <h3>SÍGUENOS</h3>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/incoreacablesec/" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/incoreacables/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@incoreacables/" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-               </div>
- <h3 style="margin-top:30px;">TELÉFONO</h3>
-            <p>+593 989290517<br>info@incorea.com</p>
-        </div>
+
     </div>
-     <div id="footer"><p>&copy;INCOREA CABLES</p></div>
+
 </div>
 <script>
     function enviar() {
