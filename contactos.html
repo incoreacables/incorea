@@ -3,128 +3,190 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>INCOREA CABLES</title>
+
 <link href="estilos.css" rel="stylesheet" type="text/css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
-    body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
-    .contacto-wrapper { 
-        display: flex; 
-        max-width: 1000px; 
-        margin: 40px auto; 
-        padding: 30px; 
-        gap: 50px;
-        background: rgba(255,255,255,0.02);
-        border-radius: 8px;
-    }
-    .form-side { flex: 2; }
-    .info-side { flex: 1; border-left: 1px solid #1abc9c33; padding-left: 30px; }
-    .input-group { margin-bottom: 20px; }
-    .input-group label { display: block; font-size: 11px; color: #1abc9c; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
-    .input-group input, .input-group textarea { 
-        width: 100%; border: 1px solid #333; background: #0a0f14; padding: 12px; 
-        box-sizing: border-box; outline: none; color: white; border-radius: 4px;
-    }
-    .input-group input:focus, .input-group textarea:focus { border-color: #1abc9c; }
-     .btn-submit { 
-        background: #1abc9c; color: #0e161d; border: none; padding: 15px 30px; 
-        text-transform: uppercase; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%;
-    }
-    .btn-submit:hover { background: #16a085; }
-    .info-side h3 { color: #1abc9c; font-size: 16px; margin-bottom: 15px; }
-    .info-side p { font-size: 14px; color: #aaa; line-height: 1.6; margin-bottom: 25px; }
-    .social-icons { display: flex; gap: 15px; margin-top: 10px; }
-    .social-icons a { 
-        color: white; font-size: 24px; text-decoration: none; transition: 0.3s; 
-    }
-    .social-icons a:hover { color: #1abc9c; transform: translateY(-3px); }
+
+body{
+    font-family:sans-serif;
+    background:#0e161d;
+    color:white;
+    margin:0;
+}
+
+.contacto-wrapper{
+    max-width:1100px;
+    margin:40px auto;
+    padding:40px;
+    background:rgba(255,255,255,0.03);
+    border-radius:10px;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+.info-side h3{
+    color:#1abc9c;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+.info-side p{
+    font-size:15px;
+    color:#bbb;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.social-icons{
+    display:flex;
+    gap:20px;
+}
+
+.social-icons a{
+    color:white;
+    font-size:30px;
+    transition:0.3s;
+}
+
+.social-icons a:hover{
+    color:#1abc9c;
+    transform:translateY(-4px);
+}
+
+.card-extra{
+    margin-top:40px;
+    background:linear-gradient(145deg,#101820,#16232d);
+    border:1px solid #1abc9c33;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+.card-extra img{
+    width:100%;
+    display:block;
+}
+
+.card-extra-text{
+    padding:25px;
+}
+
+.card-extra-text h2{
+    color:#1abc9c;
+    margin:0 0 15px;
+    font-size:26px;
+}
+
+.card-extra-text p{
+    color:#ccc;
+    line-height:1.8;
+    font-size:15px;
+    margin:0;
+}
+
 </style>
 </head>
+
 <body>
-<div class="info-side">
 
-    <h3>NUESTRA UBICACIÓN</h3>
+<div id="wrapper">
 
-    <p>
-        Quito, Ecuador<br>
-        Edificio Incorea Cables
-    </p>
+    <div id="header">
 
-    <h3>SÍGUENOS</h3>
+        <div id="logo-container">
+            <img src="logo de la empresa.png" id="logo-imagen">
+        </div>
 
-    <div class="social-icons">
-
-        <a href="https://www.facebook.com/incoreacablesec/" target="_blank" title="Facebook">
-            <i class="fab fa-facebook"></i>
-        </a>
-
-        <a href="https://www.instagram.com/incoreacables/" target="_blank" title="Instagram">
-            <i class="fab fa-instagram"></i>
-        </a>
-
-        <a href="https://www.tiktok.com/@incoreacables/" target="_blank" title="TikTok">
-            <i class="fab fa-tiktok"></i>
-        </a>
+        <div id="titulo-container">
+            <h1>INCOREA CABLES</h1>
+            <p id="sub-txt">CONTACTOS</p>
+        </div>
 
     </div>
 
-    <h3 style="margin-top:30px;">TELÉFONO</h3>
+    <div id="nav">
+        <a href="index.html">INICIO</a>
+        <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
+        <a href="global.html">GLOBAL</a>
+        <a href="otros.html">OTROS</a>
+        <a href="contactos.html">CONTACTOS</a>
+    </div>
 
-    <p>
-        +593 989290517<br>
-        info@incorea.com
-    </p>
+    <div class="contacto-wrapper">
 
-    <h3>HORARIOS</h3>
+        <div class="info-side">
 
-    <p>
-        Lunes - Viernes<br>
-        08:00 AM - 18:00 PM
-    </p>
+            <h3>NUESTRA UBICACIÓN</h3>
 
-    <div style="
-        margin-top:35px;
-        background:linear-gradient(145deg,#101820,#16232d);
-        border:1px solid #1abc9c33;
-        border-radius:10px;
-        overflow:hidden;
-        box-shadow:0 0 20px rgba(0,0,0,0.4);
-    ">
-
-        <img src="publicidad.jpg" style="width:100%; display:block;">
-
-        <div style="padding:18px;">
-
-            <h2 style="
-                color:#1abc9c;
-                margin:0 0 10px;
-                font-size:22px;
-            ">
-                Especialistas en cables eléctricos desde el 2000
-            </h2>
-
-            <p style="
-                color:#ccc;
-                line-height:1.7;
-                font-size:14px;
-                margin:0;
-            ">
-                Incorea Cables ofrece soluciones industriales de alta calidad
-                para proyectos eléctricos, comerciales y corporativos,
-                brindando innovación, seguridad y confianza en cada conexión.
+            <p>
+                Quito, Ecuador<br>
+                Edificio Incorea Cables
             </p>
+
+            <h3>SÍGUENOS</h3>
+
+            <div class="social-icons">
+
+                <a href="https://www.facebook.com/incoreacablesec/" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+
+                <a href="https://www.instagram.com/incoreacables/" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <a href="https://www.tiktok.com/@incoreacables/" target="_blank">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+
+            </div>
+
+            <h3 style="margin-top:35px;">TELÉFONO</h3>
+
+            <p>
+                +593 989290517<br>
+                info@incorea.com
+            </p>
+
+            <h3>HORARIOS</h3>
+
+            <p>
+                Lunes - Viernes<br>
+                08:00 AM - 18:00 PM
+            </p>
+
+            <div class="card-extra">
+
+                <img src="publicidad.jpg">
+
+                <div class="card-extra-text">
+
+                    <h2>
+                        Especialistas en cables eléctricos desde el 2000
+                    </h2>
+
+                    <p>
+                        Incorea Cables ofrece soluciones industriales de alta calidad
+                        para proyectos eléctricos, comerciales y corporativos,
+                        brindando innovación, seguridad y confianza en cada conexión.
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
+    <div id="footer">
+        <p>&copy; INCOREA CABLES</p>
+    </div>
+
 </div>
-<script>
-    function enviar() {
-        const n = document.getElementById('nom').value;
-        if(!n) return alert("Completa el formulario.");
-        alert("¡Gracias " + n + "! Hemos recibido tu mensaje.");
-        location.reload();
-    }
-</script>
+
 </body>
 </html>
