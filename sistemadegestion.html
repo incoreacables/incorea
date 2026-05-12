@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>INCOREA CABLES</title>
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<style>
+    body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
+    .container { margin: 20px 5%; min-height: 300px; }
+    
+    /* VISTA PÚBLICA */
+    .rama { margin-bottom: 25px; }
+    .rama-t { color: #1abc9c; font-size: 18px; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    .archivo { padding: 8px 0 8px 20px; border-left: 1px solid #1abc9c33; margin: 5px 0; }
+    .archivo a { color: #eee; text-decoration: none; font-size: 15px; }
+    .archivo a:hover { color: #1abc9c; }
+
+    /* PANEL ADMIN - MENOS LLAMATIVO */
+    .admin-zona { 
+        background: rgba(255, 255, 255, 0.02); /* Casi invisible */
+        padding: 20px 5%; 
+        border-top: 1px solid #1a252f; /* Borde muy discreto */
+        margin-top: 60px; 
+        transition: 0.5s;
+    }
+    .admin-zona:hover {
+        background: rgba(255, 255, 255, 0.05); /* Se aclara sutilmente al acercarse */
+    }
+
+    .inputs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; justify-content: center; }
+    
+    input, select { 
+        background: transparent; 
+        border: 1px solid #333; 
+        color: #888; 
+        padding: 6px 10px; 
+        border-radius: 4px; 
+        font-size: 11px; 
+        outline: none; 
+    }
+    input:focus { border-color: #1abc9c; color: white; }
+
+    button { 
+        background: transparent; 
+        border: 1px solid #1abc9c; 
+        color: #1abc9c; 
+        padding: 6px 12px; 
+        cursor: pointer; 
+        border-radius: 4px; 
+        font-size: 10px; 
+        transition: 0.3s; 
+    }
+    button:hover { background: #1abc9c; color: #0e161d; }
+    
+    /* GESTIÓN */
+    #gestion { 
+        display: none; 
+        margin-top: 20px; 
+        border-top: 1px dashed #222; 
+        padding-top: 15px; 
+        max-width: 800px; 
+        margin: 20px auto; 
+    }
+    .edit-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 11px; border-bottom: 1px solid #1a252f; align-items: center; color: #666; }
+    .clic-edit { cursor: pointer; flex: 1; }
+    .clic-edit:hover { color: #1abc9c; }
+    .btn-x { 
+        background: transparent; 
+        border: 1px solid #e74c3c; 
+        color: #e74c3c; 
+        padding: 2px 6px; 
+        font-size: 9px; 
+    }
+    .btn-x:hover { background: #e74c3c; color: white; }
+</style></head>
+
+<body>
+<div id="wrapper">
+    <div id="header">
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo"></div>
+        <div id="titulo-container">
+            <h1>INCOREA CABLES</h1>
+            <p>Directorio de Documentación</p>
+        </div>
+    </div>
+
+    <div id="nav">
+        <a href="index.html">INICIO</a>
+        <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
+        <a href="global.html">GLOBAL</a>
+        <a href="otros.html">OTROS</a>
+        <a href="contactos.html">CONTACTOS</a>
+    </div>
+
+    <div class="container" id="visor">
+        </div>
+
+    <div class="admin-zona">
+        <div class="inputs">
+            <input type="hidden" id="editIdR"> 
+            <input type="text" id="rn" placeholder="Nombre de Rama/Carpeta">
+            <button onclick="saveR()">GUARDAR CARPETA</button>
+            <button onclick="verG()" style="background:#444">GESTIONAR / EDITAR</button>
+        </div>
+        
+        <div class="inputs">
+            <input type="hidden" id="editIdF"> 
+            <select id="rd"></select>
+            <input type="text" id="fn" placeholder="Nombre del Archivo">
+            <input type="text" id="fl" placeholder="Link de OneDrive">
+            <button onclick="saveF()">GUARDAR ARCHIVO</button>
+        </div>
+
+        <div id="gestion">
+            <p style="color:#1abc9c; font-size: 11px; text-align: center; margin-bottom: 10px;">
+                TOCA UN NOMBRE PARA CARGARLO EN LOS CUADROS DE ARRIBA Y EDITARLO
+            </p>
+            <div id="listaG"></div>
+        </div>
+    </div>
+    
+    <div id="footer">
+        <p>&copy;INCOREA CABLES</p>
+    </div>
+</div>
+
+<script>
+const URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
+const KEY = "1234"; // Tu clave de acceso
+
+window.onload = load;
+
+async function load() {
+    const res = await fetch(`${URL}.json`);
+    const data = await res.json();
+    const v = document.getElementById('visor');
+    const s = document.getElementById('rd');
+    const g = document.getElementById('listaG');
+    
+    v.innerHTML = ""; g.innerHTML = "";
+    s.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+
+    if(data) {
+        Object.keys(data).forEach(idR => {
+            const r = data[idR];
+            s.innerHTML += `<option value="${idR}">${r.nombre}</option>`;
+            
+            let fHtml = "";
+            if(r.archivos) {
+                Object.keys(r.archivos).forEach(idF => {
+                    const f = r.archivos[idF];
+                    const dLink = f.link.split('?')[0].replace("redir", "download") + "?download=1";
+                    fHtml += `<div class="archivo"><a href="${dLink}" target="_self"> ${f.nombre}</a></div>`;
+                   
+                    // Lista de gestión para archivos
+                    g.innerHTML += `<div class="edit-item">
+                        <span class="clic-edit" onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">+ Archivo: ${f.nombre} (Editar)</span>
+                        <button class="btn-x" onclick="delF('${idR}','${idF}')">x</button>
+                    </div>`;
+                });
+            }
+            // Vista pública
+            v.innerHTML += `<div class="rama"><div class="rama-t">${r.nombre}</div>${fHtml}</div>`;
+            
+            // Lista de gestión para carpetas
+            g.innerHTML += `<div class="edit-item">
+                <b class="clic-edit" onclick="upR('${idR}','${r.nombre}')">CARPETA: ${r.nombre} (Editar nombre)</b>
+                <button class="btn-x" onclick="delR('${idR}')">Borrar</button>
+            </div>`;
+        });
+    }
+}
+
+function val() { return prompt("Introduce la clave de administrador:") === KEY; }
+
+function verG() { if(val()) document.getElementById('gestion').style.display = "block"; }
+
+// Cargar datos de Carpeta arriba
+function upR(id, n) {
+    document.getElementById('editIdR').value = id;
+    document.getElementById('rn').value = n;
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+// Cargar datos de Archivo arriba
+function upF(idR, idF, n, l) {
+    document.getElementById('rd').value = idR;
+    document.getElementById('editIdF').value = idF;
+    document.getElementById('fn').value = n;
+    document.getElementById('fl').value = l;
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+async function saveR() {
+    const id = document.getElementById('editIdR').value;
+    const n = document.getElementById('rn').value;
+    if(!n) return alert("Escribe un nombre");
+    if(!val()) return;
+    
+    const met = id ? 'PATCH' : 'POST';
+    const url = id ? `${URL}/${id}.json` : `${URL}.json`;
+    await fetch(url, { method: met, body: JSON.stringify({nombre: n}) });
+    reset(); load();
+}
+
+async function saveF() {
+    const idR = document.getElementById('rd').value;
+    const idF = document.getElementById('editIdF').value;
+    const n = document.getElementById('fn').value;
+    const l = document.getElementById('fl').value;
+    if(!idR || !n || !l) return alert("Completa todos los campos");
+    if(!val()) return;
+
+    const met = idF ? 'PATCH' : 'POST';
+    const url = idF ? `${URL}/${idR}/archivos/${idF}.json` : `${URL}/${idR}/archivos.json`;
+    await fetch(url, { method: met, body: JSON.stringify({nombre: n, link: l}) });
+    reset(); load();
+}
+
+function reset() {
+    document.getElementById('editIdR').value = ""; 
+    document.getElementById('editIdF').value = "";
+    document.getElementById('rn').value = ""; 
+    document.getElementById('fn').value = ""; 
+    document.getElementById('fl').value = "";
+}
+
+async function delR(id) { if(confirm("¿Borrar carpeta y todo su contenido?") && val()) { await fetch(`${URL}/${id}.json`, { method:'DELETE' }); load(); } }
+async function delF(idR, idF) { if(confirm("¿Borrar este archivo?") && val()) { await fetch(`${URL}/${idR}/archivos/${idF}.json`, { method:'DELETE' }); load(); } }
+
+</script>
+</body>
+</html>
