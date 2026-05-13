@@ -11,7 +11,6 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            /* El scroll ahora es de la página entera, no del PDF */
             overflow-y: auto; 
         }
 
@@ -24,13 +23,10 @@
             align-items: center;
         }
 
-        /* AQUÍ ESTÁ EL TRUCO: 
-           Le damos una altura fija MUY grande para que
-           el navegador rinda todas las páginas del PDF hacia abajo.
-        */
+        /* Ajustado a 2800px para que abarque exactamente 3 hojas aproximadamente */
         .visor-extendido {
             width: 100%;
-            height: 8500px; /* Ajusta este número según cuántas páginas tenga el PDF */
+            height: 2800px; 
             background: transparent;
             border: none;
             margin-bottom: 50px;
@@ -42,7 +38,6 @@
             border: none;
         }
 
-        /* Cuadro de administración discreto */
         .admin-footer {
             margin-top: 20px;
             padding: 15px;
@@ -50,8 +45,9 @@
             border-radius: 10px;
             display: flex;
             gap: 10px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; }
+        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
         .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -95,8 +91,9 @@
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Forzamos el ajuste de ancho para que se vea como una página web
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
+                // Truco para refrescar caché y ajustar al ancho
+                const timestamp = new Date().getTime();
+                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
             }
         } catch (e) { console.error(e); }
     };
