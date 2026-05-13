@@ -2,7 +2,7 @@
 body, html { 
     margin: 0; padding: 0; 
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; 
-    background-color: #0f171e !important; /* Un tono más oscuro para resaltar el cristal */
+    background-color: #0f171e !important; 
     color: #ecf0f1; 
     scroll-behavior: smooth; 
 }
@@ -105,7 +105,7 @@ body, html {
     background: #1abc9c; 
     color: white !important; 
     padding: 14px 35px; 
-    border-radius: 8px; /* Bordes más modernos que el óvalo */
+    border-radius: 8px; 
     text-decoration: none; 
     font-weight: bold; 
     text-transform: uppercase; 
@@ -131,11 +131,11 @@ body, html {
 }
 
 .servicio-card-pro { 
-    background: rgba(44, 62, 80, 0.4) !important; /* Efecto Cristal Transparente */
-    backdrop-filter: blur(12px); /* Desenfoque de fondo elegante */
+    background: rgba(44, 62, 80, 0.4) !important; 
+    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1) !important; 
-    border-left: 5px solid #1abc9c !important; /* Detalle lateral de marca */
+    border-left: 5px solid #1abc9c !important; 
     border-radius: 16px; 
     width: calc(33.33% - 25px); 
     min-width: 300px;
@@ -170,8 +170,6 @@ body, html {
 .servicio-card-pro:hover h4 {
     color: #1abc9c !important;
 }
-
-/* Resaltado específico para cuando vienes de la bandeja */
 .resaltar-tarjeta {
     border: 3px solid #1abc9c !important;
     box-shadow: 0 0 30px rgba(26, 188, 156, 0.6) !important;
