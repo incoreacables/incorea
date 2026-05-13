@@ -11,27 +11,25 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            overflow-x: hidden;
         }
 
-        /* Contenedor que deja respirar el diseño */
         .seccion-revista {
-            max-width: 1050px; 
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1200px; /* Un poco más ancho para que luzca el diseño */
+            margin: 20px auto;
+            padding: 0 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Visor estilo presentación/diapositivas */
+        /* CAMBIO CLAVE: Quitamos el límite de altura para que se estire */
         .visor-slide {
             width: 100%;
-            height: 85vh; 
+            height: 2500px; /* Ajusta este número según el largo de tu revista (ej: 3000px, 5000px) */
             background: #16232d;
-            border-radius: 12px;
+            border-radius: 8px;
             border: 1px solid rgba(26, 188, 156, 0.2);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             overflow: hidden;
         }
         
@@ -41,33 +39,35 @@
             border: none;
         }
 
-        /* Cuadro de administración discreto al final */
         .admin-footer {
-            margin-top: 40px;
-            margin-bottom: 20px;
-            padding: 12px 25px;
-            background: rgba(26, 188, 156, 0.03);
+            margin: 40px 0;
+            padding: 15px;
+            background: rgba(26, 188, 156, 0.05);
             border-radius: 50px;
-            border: 1px solid rgba(26, 188, 156, 0.15);
+            border: 1px solid rgba(26, 188, 156, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .admin-footer input { 
-            background: transparent;
-            border: none;
+            background: #0e161d;
+            border: 1px solid #333;
             color: #1abc9c;
-            font-size: 13px;
+            padding: 8px 15px;
+            border-radius: 20px;
             outline: none;
-            width: 280px;
+            width: 300px;
         }
+
         .admin-footer button { 
             background: #1abc9c; 
             border: none; 
             color: #0e161d; 
-            padding: 6px 18px;
-            border-radius: 25px;
-            font-size: 11px;
+            padding: 8px 20px;
+            border-radius: 20px;
             font-weight: bold; 
             cursor: pointer;
-            text-transform: uppercase;
         }
     </style>
 </head>
@@ -75,9 +75,7 @@
 
 <div id="wrapper">
     <div id="header">
-        <div id="logo-container">
-            <img src="logo de la empresa.png" id="logo-imagen">
-        </div>
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
         <div id="titulo-container">
             <h1>INCOREA CABLES</h1>
             <p id="sub-txt">REVISTA DIGITAL</p>
@@ -95,12 +93,12 @@
 
     <div class="seccion-revista">
         <div class="visor-slide">
-            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitH" allow="autoplay"></iframe>
+            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW" allow="autoplay"></iframe>
         </div>
 
         <div class="admin-footer">
             <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
-            <button onclick="actualizarBoletin()">Actualizar</button>
+            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
         </div>
     </div>
 
@@ -112,31 +110,24 @@
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // Al cargar, verifica si en Firebase hay un nombre más reciente guardado
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitH";
+                // Usamos FitW para que se ajuste al ANCHO total
+                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW";
             }
-        } catch (e) { console.error("Error cargando desde Firebase:", e); }
+        } catch (e) { console.error(e); }
     };
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
         if(!nombre) return alert("Escribe el nombre del archivo");
-        
-        const pass = prompt("Introduce clave de administrador:");
+        const pass = prompt("Clave:");
         if(pass === "1234") {
-            await fetch(DB_URL, {
-                method: 'PUT',
-                body: JSON.stringify({ nombre: nombre })
-            });
-            alert("Revista actualizada en la base de datos.");
+            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
             location.reload();
-        } else {
-            alert("Clave incorrecta.");
         }
     }
 </script>
