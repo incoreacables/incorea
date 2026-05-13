@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCOREA CABLES - Otros</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
     <style>
         body { 
             font-family: sans-serif; 
             background: #0e161d; 
             color: white; 
             margin: 0;
-            /* El scroll ahora es de la página entera, no del PDF */
             overflow-y: auto; 
         }
 
@@ -24,13 +28,9 @@
             align-items: center;
         }
 
-        /* AQUÍ ESTÁ EL TRUCO: 
-           Le damos una altura fija MUY grande (ej: 8000px) para que
-           el navegador rinda todas las páginas del PDF hacia abajo.
-        */
         .visor-extendido {
             width: 100%;
-            height: 8500px; /* Ajusta este número según cuántas páginas tenga el PDF */
+            height: 8500px; 
             background: transparent;
             border: none;
             margin-bottom: 50px;
@@ -42,17 +42,22 @@
             border: none;
         }
 
-        /* Cuadro de administración discreto */
         .admin-footer {
             margin-top: 20px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
+            flex-direction: column; /* Cambiado a columna para el cargador */
+            align-items: center;
             gap: 10px;
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; }
+        
+        .controles-subida { display: flex; gap: 10px; }
+        
+        .admin-footer input[type="text"] { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; }
         .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        #estadoSubida { font-size: 12px; color: #1abc9c; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -81,33 +86,68 @@
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
-            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
+            <div class="controles-subida">
+                <input type="file" id="inputArchivo" accept=".pdf" style="color:white; font-size: 12px;">
+                <button onclick="subirYActualizar()">SUBIR DE PC Y ACTUALIZAR</button>
+            </div>
+            <div id="estadoSubida"></div>
         </div>
     </div>
 </div>
 
 <script>
-    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
-
-    window.onload = async function() {
-        try {
-            const res = await fetch(DB_URL);
-            const data = await res.json();
-            if(data && data.nombre) {
-                // Forzamos el ajuste de ancho para que se vea como una página web
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
-            }
-        } catch (e) { console.error(e); }
+    // Configura aquí tus credenciales de Firebase
+    const firebaseConfig = {
+        databaseURL: "https://httpsincorea-cables-default-rtdb.firebaseio.com",
+        storageBucket: "httpsincorea-cables.appspot.com" 
     };
 
-    async function actualizarBoletin() {
-        const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre");
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const storage = firebase.storage();
+
+    // 1. Cargar el PDF actual al abrir la página
+    window.onload = async function() {
+        database.ref("archivoOtros/nombre").on("value", (snapshot) => {
+            const link = snapshot.val();
+            if(link) {
+                document.getElementById('iframePDF').src = link + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
+            }
+        });
+    };
+
+    // 2. Función para subir el archivo real y guardar el link
+    async function subirYActualizar() {
+        const file = document.getElementById('inputArchivo').files[0];
+        if(!file) return alert("Selecciona un archivo PDF de tu PC");
+
         const pass = prompt("Clave:");
         if(pass === "1234") {
-            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-            location.reload();
+            const estado = document.getElementById('estadoSubida');
+            estado.innerText = "Subiendo archivo... espera un momento.";
+
+            try {
+                // Subir el archivo al Storage de Firebase
+                const storageRef = storage.ref('revistas/' + file.name);
+                const task = await storageRef.put(file);
+                
+                // Obtener el link de internet del archivo recién subido
+                const urlDescarga = await storageRef.getDownloadURL();
+
+                // Guardar ese link en la Base de Datos
+                await database.ref("archivoOtros").set({ nombre: urlDescarga });
+
+                estado.innerText = "¡Actualizado con éxito!";
+                alert("Revista publicada correctamente.");
+                location.reload();
+
+            } catch (error) {
+                console.error(error);
+                alert("Error al subir. Asegúrate de tener activado 'Storage' en tu consola Firebase.");
+                estado.innerText = "";
+            }
+        } else {
+            alert("Clave incorrecta");
         }
     }
 </script>
