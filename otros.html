@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INCOREA CABLES - Otros</title>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <style>
+        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
+        .otros-container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
+        
+        .visor-adobe {
+            width: 100%;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid #1abc9c33;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-top: 20px;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Cuadro para cambiar el link */
+        .admin-link {
+            background: rgba(26, 188, 156, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 1px dashed #1abc9c;
+        }
+        .admin-link input {
+            padding: 8px;
+            width: 300px;
+            border-radius: 4px;
+            border: none;
+            outline: none;
+        }
+        .admin-link button {
+            padding: 8px 15px;
+            background: #1abc9c;
+            border: none;
+            color: #0e161d;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="header">
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
+        <div id="titulo-container">
+            <h1>INCOREA CABLES</h1>
+            <p id="sub-txt">BOLETÍN DIGITAL</p>
+        </div>
+    </div>
+
+    <div id="nav">
+        <a href="index.html">INICIO</a>
+        <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
+        <a href="global.html">GLOBAL</a>
+        <a href="otros.html">OTROS</a>
+        <a href="contactos.html">CONTACTOS</a>
+    </div>
+
+    <div class="otros-container">
+        <div class="admin-link">
+            <input type="text" id="nuevoLink" placeholder="Pega aquí el nuevo link de Adobe">
+            <button onclick="actualizarLink()">CAMBIAR LINK</button>
+        </div>
+
+        <div id="contenedorVisor" class="visor-adobe">
+            <p style="padding: 50px;">Cargando boletín...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // URL de tu Firebase (la misma que usas en el directorio)
+    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/linkOtros.json";
+
+    // 1. Cargar el link automáticamente al abrir la página
+    window.onload = async function() {
+        try {
+            const res = await fetch(DB_URL);
+            const data = await res.json();
+            if(data && data.url) {
+                document.getElementById('contenedorVisor').innerHTML = `<iframe src="${data.url}"></iframe>`;
+            } else {
+                document.getElementById('contenedorVisor').innerHTML = `<p>No hay link configurado.</p>`;
+            }
+        } catch (e) {
+            console.error("Error cargando link", e);
+        }
+    };
+
+    // 2. Función para cambiar el link sin entrar al código
+    async function actualizarLink() {
+        const url = document.getElementById('nuevoLink').value;
+        if(!url) return alert("Pega un link válido");
+        
+        const pass = prompt("Introduce la clave para cambiar el link:");
+        if(pass === "1234") { // Usa tu misma clave
+            await fetch(DB_URL, {
+                method: 'PUT',
+                body: JSON.stringify({ url: url })
+            });
+            alert("¡Link actualizado! Recarga la página.");
+            location.reload();
+        } else {
+            alert("Clave incorrecta.");
+        }
+    }
+</script>
+
+</body>
+</html>
