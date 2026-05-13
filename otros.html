@@ -11,7 +11,6 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            /* El scroll ahora es de la página entera, no del PDF */
             overflow-y: auto; 
         }
 
@@ -24,16 +23,17 @@
             align-items: center;
         }
 
-        /* AQUÍ ESTÁ EL TRUCO: 
-           Le damos una altura fija MUY grande (ej: 8000px) para que
-           el navegador rinda todas las páginas del PDF hacia abajo.
-        */
+        /* Ajustamos para que el visor ocupe el alto de la pantalla 
+           y el usuario use el scroll interno del PDF, evitando espacios vacíos */
         .visor-extendido {
             width: 100%;
-            height: 8500px; /* Ajusta este número según cuántas páginas tenga el PDF */
+            height: 90vh; /* Usa casi toda la altura de la pantalla disponible */
             background: transparent;
             border: none;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         iframe { 
@@ -42,16 +42,17 @@
             border: none;
         }
 
-        /* Cuadro de administración discreto */
+        /* Panel de administración arriba para mayor comodidad */
         .admin-footer {
-            margin-top: 20px;
+            margin-bottom: 20px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
             gap: 10px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; }
+        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
         .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -76,13 +77,13 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-extendido">
-            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW&scrollbar=0" scrolling="no"></iframe>
+        <div class="admin-footer">
+            <input type="text" id="nombreArchivo" placeholder="Nombre exacto del PDF...">
+            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
         </div>
 
-        <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
-            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
+        <div class="visor-extendido">
+            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW"></iframe>
         </div>
     </div>
 </div>
@@ -95,8 +96,8 @@
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Forzamos el ajuste de ancho para que se vea como una página web
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
+                const timestamp = new Date().getTime();
+                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
             }
         } catch (e) { console.error(e); }
     };
