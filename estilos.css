@@ -1,6 +1,4 @@
-/* ============================================================
-   1. REGLAS BASE Y RESET
-   ============================================================ */
+
 body, html { 
     margin: 0; padding: 0; 
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; 
@@ -9,9 +7,6 @@ body, html {
     scroll-behavior: smooth; 
 }
 
-/* ============================================================
-   2. ESTRUCTURA (HEADER, NAV, FOOTER)
-   ============================================================ */
 #header { 
     background-color: #1a252f !important; 
     padding: 20px 5%;
@@ -89,9 +84,6 @@ body, html {
     border-top: 4px solid #1abc9c;
 }
 
-/* ============================================================
-   3. HERO Y ELEMENTOS DINÁMICOS
-   ============================================================ */
 .hero-dinamico {
     padding: 60px 5%;
     display: flex; 
@@ -130,9 +122,6 @@ body, html {
     box-shadow: 0 8px 20px rgba(26, 188, 156, 0.5);
 }
 
-/* ============================================================
-   4. SECCIÓN DE TARJETAS (REFINADO GLASSMORPISM)
-   ============================================================ */
 .servicios-grid { 
     display: flex; 
     flex-wrap: wrap; 
@@ -189,9 +178,6 @@ body, html {
     animation: pulso-brillo 2s infinite;
 }
 
-/* ============================================================
-   5. BANDEJA DE COMENTARIOS Y TABLAS
-   ============================================================ */
 .comentarios-header {
     display: flex;
     justify-content: space-between;
@@ -231,9 +217,6 @@ body, html {
 .recibido { background: #f1c40f; color: #000; }
 .visto { background: #2ecc71; color: #fff; }
 
-/* ============================================================
-   6. ANIMACIONES
-   ============================================================ */
 @keyframes latidoSutilLogo {
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(26, 188, 156, 0.2)); }
     50% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(26, 188, 156, 0.5)); }
