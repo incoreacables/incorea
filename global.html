@@ -15,8 +15,7 @@
         border-radius: 12px;
         padding: 10px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        overflow: hidden; /* Esto es clave para recortar la barra superior */
-    }
+        overflow: hidden;
     .iframe-responsivo {
         position: relative;
         width: 100%;
@@ -26,10 +25,10 @@
     }
 .iframe-responsivo iframe {
         position: absolute;
-        top: -36px; /* Empuja el iframe hacia arriba para tapar la barra "Modo Lectura" */
+        top: -36px; 
         left: 0;
         width: 100%;
-        height: calc(100% + 36px); /* Le suma el tamaño que empujamos arriba para que no quede un hueco abajo */
+        height: calc(100% + 36px);
         border: none;
     }
 </style>
