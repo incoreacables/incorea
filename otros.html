@@ -8,18 +8,22 @@
     <style>
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
         .otros-container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
+        
+        /* El contenedor del PDF */
         .visor-pdf {
             width: 100%;
             height: 85vh;
-            background: rgba(255, 255, 255, 0.05);
+            background: #2a2a2a;
             border-radius: 12px;
             border: 1px solid #1abc9c33;
             overflow: hidden;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             margin-top: 20px;
         }
+        
         iframe { width: 100%; height: 100%; border: none; }
 
+        /* Cuadro de administración */
         .admin-link {
             background: rgba(26, 188, 156, 0.1);
             padding: 15px;
@@ -28,7 +32,7 @@
             display: inline-block;
             border: 1px dashed #1abc9c;
         }
-        .admin-link input { padding: 8px; width: 250px; border-radius: 4px; border: none; outline: none; }
+        .admin-link input { padding: 8px; width: 280px; border-radius: 4px; border: none; outline: none; }
         .admin-link button { padding: 8px 15px; background: #1abc9c; border: none; color: #0e161d; font-weight: bold; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
@@ -44,12 +48,12 @@
 
     <div class="otros-container">
         <div class="admin-link">
-            <input type="text" id="nombreArchivo" placeholder="magazine_003.pdf">
-            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
+            <input type="text" id="nombreArchivo" placeholder="Nombre exacto (ej: revista.pdf)">
+            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
         </div>
 
         <div id="contenedorPDF" class="visor-pdf">
-            <iframe id="iframePDF" src=""></iframe>
+            <iframe id="iframePDF" src="" allow="autoplay"></iframe>
         </div>
     </div>
 </div>
@@ -57,33 +61,35 @@
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
+    // Carga el PDF guardado y le quita las barras de herramientas
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Esto busca el archivo en tu GitHub
-                document.getElementById('iframePDF').src = data.nombre;
+                // El secreto: agregamos los parámetros de limpieza al final del nombre
+                const linkLimpio = data.nombre + "#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+                document.getElementById('iframePDF').src = linkLimpio;
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Error al cargar:", e); }
     };
 
+    // Función para guardar el nuevo nombre en Firebase
     async function actualizarBoletin() {
-        // CORRECCIÓN: Aquí obtenemos el valor del input por su ID
-        const nombre = document.getElementById('nombreArchivo').value;
+        const nombre = document.getElementById('nombreArchivo').value.trim();
         
-        if(!nombre) return alert("Escribe el nombre del archivo");
+        if(!nombre) return alert("Por favor, escribe el nombre del archivo.");
         
-        const pass = prompt("Clave:");
+        const pass = prompt("Introduce la clave de administrador:");
         if(pass === "1234") {
             await fetch(DB_URL, {
                 method: 'PUT',
                 body: JSON.stringify({ nombre: nombre })
             });
-            alert("¡Actualizado!");
+            alert("¡Revista actualizada correctamente!");
             location.reload();
         } else {
-            alert("Clave incorrecta");
+            alert("Clave incorrecta.");
         }
     }
 </script>
