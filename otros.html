@@ -6,56 +6,68 @@
     <title>INCOREA CABLES - Otros</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
-        
-        /* Contenedor principal para que ocupe todo el ancho */
-        .otros-full-container { 
-            width: 100%; 
-            margin: 0; 
-            padding: 0; 
+        body { 
+            font-family: sans-serif; 
+            background: #0e161d; 
+            color: white; 
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor que deja respirar el diseño */
+        .seccion-revista {
+            max-width: 1050px; 
+            margin: 30px auto;
+            padding: 0 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* El visor ahora ocupa todo el ancho y es más alto */
-        .visor-pdf-full {
+        /* Visor estilo presentación/diapositivas */
+        .visor-slide {
             width: 100%;
-            height: 90vh; /* Ocupa el 90% de la altura de la pantalla */
-            background: #1a1a1a;
-            border: none;
+            height: 85vh; 
+            background: #16232d;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
             overflow: hidden;
-            display: block;
         }
         
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none;
+        }
 
-        /* Cuadro de administración pequeño y al final */
+        /* Cuadro de administración discreto al final */
         .admin-footer {
-            margin-top: 50px;
+            margin-top: 40px;
             margin-bottom: 20px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 5px;
-            border: 1px solid rgba(26, 188, 156, 0.1);
+            padding: 12px 25px;
+            background: rgba(26, 188, 156, 0.03);
+            border-radius: 50px;
+            border: 1px solid rgba(26, 188, 156, 0.15);
         }
         .admin-footer input { 
-            padding: 5px; 
-            width: 180px; 
-            font-size: 12px;
-            background: #0e161d;
-            border: 1px solid #333;
-            color: #fff;
+            background: transparent;
+            border: none;
+            color: #1abc9c;
+            font-size: 13px;
             outline: none;
+            width: 280px;
         }
         .admin-footer button { 
-            padding: 5px 10px; 
             background: #1abc9c; 
             border: none; 
             color: #0e161d; 
-            font-size: 12px;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 11px;
             font-weight: bold; 
-            cursor: pointer; 
+            cursor: pointer;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -68,7 +80,7 @@
         </div>
         <div id="titulo-container">
             <h1>INCOREA CABLES</h1>
-            <p id="sub-txt">OTROS RECURSOS</p>
+            <p id="sub-txt">REVISTA DIGITAL</p>
         </div>
     </div>
 
@@ -81,14 +93,14 @@
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
-    <div class="otros-full-container">
-        <div id="contenedorPDF" class="visor-pdf-full">
-            <iframe id="iframePDF" src="" allow="autoplay"></iframe>
+    <div class="seccion-revista">
+        <div class="visor-slide">
+            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitH" allow="autoplay"></iframe>
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Link o nombre.pdf">
-            <button onclick="actualizarBoletin()">CAMBIAR REVISTA</button>
+            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
+            <button onclick="actualizarBoletin()">Actualizar</button>
         </div>
     </div>
 
@@ -100,30 +112,31 @@
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
+    // Al cargar, verifica si en Firebase hay un nombre más reciente guardado
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Mantenemos los parámetros para que se vea limpio (sin barras laterales)
-                const linkFinal = data.nombre + "#toolbar=0&navpanes=0&scrollbar=0";
-                document.getElementById('iframePDF').src = linkFinal;
+                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitH";
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Error cargando desde Firebase:", e); }
     };
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Ingresa el nombre del archivo");
+        if(!nombre) return alert("Escribe el nombre del archivo");
         
-        const pass = prompt("Clave:");
+        const pass = prompt("Introduce clave de administrador:");
         if(pass === "1234") {
             await fetch(DB_URL, {
                 method: 'PUT',
                 body: JSON.stringify({ nombre: nombre })
             });
-            alert("Actualizado");
+            alert("Revista actualizada en la base de datos.");
             location.reload();
+        } else {
+            alert("Clave incorrecta.");
         }
     }
 </script>
