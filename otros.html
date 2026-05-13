@@ -14,10 +14,9 @@
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; overflow-y: auto; }
         .seccion-revista { max-width: 1100px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Visor extendido para ver todo el documento hacia abajo */
         .visor-extendido { 
             width: 100%; 
-            height: 9000px; /* Ajusta según el largo total de tus páginas */
+            height: 9000px; 
             background: transparent; 
             border: none; 
             margin-bottom: 50px; 
@@ -76,7 +75,7 @@
 </div>
 
 <script>
-    // REEMPLAZA ESTOS DATOS CON LOS DE TU PROYECTO
+    // Configuración (Asegúrate que estos datos sean los de tu Firebase)
     const firebaseConfig = {
         databaseURL: "https://httpsincorea-cables-default-rtdb.firebaseio.com",
         storageBucket: "httpsincorea-cables-default-rtdb.appspot.com" 
@@ -86,12 +85,13 @@
     const database = firebase.database();
     const storage = firebase.storage();
 
-    // Cargar la revista guardada al iniciar
+    // CARGA CON TRUCO DE REFRESCO
     database.ref("archivoOtros/nombre").on("value", (snapshot) => {
         const link = snapshot.val();
         if(link) {
-            // Se usa FitW para que abarque todo el ancho
-            document.getElementById('iframePDF').src = link + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
+            // El truco: añadimos un código aleatorio al final del link para que no use la memoria vieja
+            const cacheBuster = "&t=" + new Date().getTime();
+            document.getElementById('iframePDF').src = link + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0" + cacheBuster;
         }
     });
 
@@ -105,8 +105,9 @@
             estadoTxt.innerText = "Subiendo archivo... espera un momento.";
 
             try {
-                // 1. Subir el archivo al Storage
-                const storageRef = storage.ref('revistas/' + file.name);
+                // 1. Subir con nombre único para evitar que se pise con el anterior
+                const nombreUnico = Date.now() + "_" + file.name;
+                const storageRef = storage.ref('revistas/' + nombreUnico);
                 await storageRef.put(file);
                 
                 // 2. Obtener el link público
@@ -116,11 +117,11 @@
                 await database.ref("archivoOtros").set({ nombre: urlDescarga });
 
                 estadoTxt.innerText = "¡Subida exitosa!";
-                alert("La revista se ha actualizado para todos.");
+                alert("Revista actualizada. La página se refrescará.");
                 location.reload();
             } catch (error) {
                 console.error(error);
-                alert("Error al subir. Revisa si activaste el Storage en Firebase.");
+                alert("Error al subir. Revisa si el Storage está activo en Firebase.");
             }
         }
     }
