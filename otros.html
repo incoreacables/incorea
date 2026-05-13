@@ -8,10 +8,9 @@
     <style>
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
         .otros-container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
-        
-        .visor-adobe {
+        .visor-pdf {
             width: 100%;
-            height: 80vh;
+            height: 85vh;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             border: 1px solid #1abc9c33;
@@ -21,7 +20,7 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Cuadro para cambiar el link */
+        /* Cuadro de administración */
         .admin-link {
             background: rgba(26, 188, 156, 0.1);
             padding: 15px;
@@ -30,90 +29,60 @@
             display: inline-block;
             border: 1px dashed #1abc9c;
         }
-        .admin-link input {
-            padding: 8px;
-            width: 300px;
-            border-radius: 4px;
-            border: none;
-            outline: none;
-        }
-        .admin-link button {
-            padding: 8px 15px;
-            background: #1abc9c;
-            border: none;
-            color: #0e161d;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-        }
+        .admin-link input { padding: 8px; width: 250px; border-radius: 4px; border: none; outline: none; }
+        .admin-link button { padding: 8px 15px; background: #1abc9c; border: none; color: #0e161d; font-weight: bold; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
-    <div id="header">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
-        <div id="titulo-container">
-            <h1>INCOREA CABLES</h1>
-            <p id="sub-txt">BOLETÍN DIGITAL</p>
-        </div>
-    </div>
-
     <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
-        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-        <a href="global.html">GLOBAL</a>
         <a href="otros.html">OTROS</a>
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
     <div class="otros-container">
         <div class="admin-link">
-            <input type="text" id="nuevoLink" placeholder="Pega aquí el nuevo link de Adobe">
-            <button onclick="actualizarLink()">CAMBIAR LINK</button>
+            <input type="text" id="nombreArchivo" placeholder="Ejemplo: boletin.pdf">
+            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
         </div>
 
-        <div id="contenedorVisor" class="visor-adobe">
-            <p style="padding: 50px;">Cargando boletín...</p>
+        <div id="contenedorPDF" class="visor-pdf">
+            <iframe id="iframePDF" src="boletin.pdf"></iframe>
         </div>
     </div>
 </div>
 
 <script>
-    // URL de tu Firebase (la misma que usas en el directorio)
-    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/linkOtros.json";
+    // URL de Firebase para guardar el nombre del archivo del mes
+    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // 1. Cargar el link automáticamente al abrir la página
+    // Cargar el nombre del archivo guardado al abrir
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
-            if(data && data.url) {
-                document.getElementById('contenedorVisor').innerHTML = `<iframe src="${data.url}"></iframe>`;
-            } else {
-                document.getElementById('contenedorVisor').innerHTML = `<p>No hay link configurado.</p>`;
+            if(data && data.nombre) {
+                document.getElementById('iframePDF').src = data.nombre;
             }
-        } catch (e) {
-            console.error("Error cargando link", e);
-        }
+        } catch (e) { console.error(e); }
     };
 
-    // 2. Función para cambiar el link sin entrar al código
-    async function actualizarLink() {
-        const url = document.getElementById('nuevoLink').value;
-        if(!url) return alert("Pega un link válido");
+    // Función para cambiar el nombre del archivo (Ej: boletin_mayo.pdf)
+    async function actualizarBoletin() {
+        const nombre = document.getElementById('nombreArchivo').value;
+        if(!nombre) return alert("Escribe el nombre del archivo");
         
-        const pass = prompt("Introduce la clave para cambiar el link:");
-        if(pass === "1234") { // Usa tu misma clave
+        const pass = prompt("Clave:");
+        if(pass === "1234") {
             await fetch(DB_URL, {
                 method: 'PUT',
-                body: JSON.stringify({ url: url })
+                body: JSON.stringify({ nombre: nombre })
             });
-            alert("¡Link actualizado! Recarga la página.");
+            alert("¡Actualizado!");
             location.reload();
-        } else {
-            alert("Clave incorrecta.");
         }
     }
 </script>
