@@ -5,19 +5,19 @@ body, html {
     color: #ecf0f1; 
     scroll-behavior: smooth; 
 }
+@media (max-width: 768px) {
+    .servicio-card-pro {
+        width: 100% !important;
+        min-width: unset;
+    }
+    #header {
+        flex-direction: column;
+        height: auto;
+        text-align: center;
+    }
+    #titulo-container { text-align: center; }
+}
 
-/* ============================================================
-   2. ESTRUCTURA (HEADER, NAV, FOOTER)
-   ============================================================ */
-#header { 
-    background-color: #1a252f !important; 
-    padding: 20px 5%;
-    border-bottom: 4px solid #1abc9c; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    height: 120px;
-    overflow: hidden;
 }
 
 #logo-container, .logo-indi { 
@@ -32,10 +32,7 @@ body, html {
     filter: drop-shadow(0 0 5px rgba(26, 188, 156, 0.2)); 
 }
 
-#titulo-container { 
-    text-align: right; 
-    line-height: 1.1;
-    animation: slideInRight 1.5s ease-out forwards; 
+
 }
 
 #titulo-container h1 { 
