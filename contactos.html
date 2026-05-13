@@ -3,86 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INCOREA CABLES</title>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-body{
-    font-family:sans-serif;
-    background:#0e161d;
-    color:white;
-    margin:0;
-}
-.contacto-wrapper{
-    max-width:1100px;
-    margin:40px auto;
-    padding:40px;
-    background:rgba(255,255,255,0.03);
-    border-radius:10px;
-    box-shadow:0 0 25px rgba(0,0,0,0.4);
-}
-.info-side h3{
-    color:#1abc9c;
-    font-size:18px;
-    margin-bottom:15px;
-}
-.info-side p{
-    font-size:15px;
-    color:#bbb;
-    line-height:1.8;
-    margin-bottom:30px;
-}
-.social-icons{
-    display:flex;
-    gap:20px;
-}
-.social-icons a{
-    color:white;
-    font-size:30px;
-    transition:0.3s;
-}
-.social-icons a:hover{
-    color:#1abc9c;
-    transform:translateY(-4px);
-}
-.card-extra{
-    margin-top:40px;
-    background:linear-gradient(145deg,#101820,#16232d);
-    border:1px solid #1abc9c33;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
-}
-.card-extra img{
-    width:100%;
-    display:block;
-}
-.card-extra-text{
-    padding:25px;
-}
-.card-extra-text h2{
-    color:#1abc9c;
-    margin:0 0 15px;
-    font-size:26px;
-}
-.card-extra-text p{
-    color:#ccc;
-    line-height:1.8;
-    font-size:15px;
-    margin:0;
-}
+    <title>INCOREA CABLES</title>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body{
+            font-family:sans-serif;
+            background:#0e161d;
+            color:white;
+            margin:0;
+        }
+        .contacto-wrapper{
+            max-width:1100px;
+            margin:40px auto;
+            padding:40px;
+            background:rgba(255,255,255,0.03);
+            border-radius:10px;
+            box-shadow:0 0 25px rgba(0,0,0,0.4);
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .info-side {
+            flex: 1;
+            min-width: 300px;
+        }
+        .form-side {
+            flex: 1.5;
+            min-width: 300px;
+        }
+        .info-side h3, .form-side h3{
+            color:#1abc9c;
+            font-size:18px;
+            margin-bottom:15px;
+        }
+        .info-side p{
+            font-size:15px;
+            color:#bbb;
+            line-height:1.8;
+            margin-bottom:30px;
+        }
+        .social-icons{
+            display:flex;
+            gap:20px;
+        }
+        .social-icons a{
+            color:white;
+            font-size:30px;
+            transition:0.3s;
+        }
+        .social-icons a:hover{
+            color:#1abc9c;
+            transform:translateY(-4px);
+        }
+        .card-extra{
+            margin-top:40px;
+            background:linear-gradient(145deg,#101820,#16232d);
+            border:1px solid #1abc9c33;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 0 20px rgba(0,0,0,0.4);
+        }
+        .card-extra-text{
+            padding:25px;
+        }
+        .card-extra-text h2{
+            color:#1abc9c;
+            margin:0 0 15px;
+            font-size:26px;
+        }
+        .card-extra-text p{
+            color:#ccc;
+            line-height:1.8;
+            font-size:15px;
+            margin:0;
+        }
+        /* Estilos para el mapa y formulario */
+        .mapa-box {
+            width: 100%;
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid #1abc9c33;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #34495e;
+            color: white;
+            border-radius: 5px;
+            outline: none;
+        }
+        .btn-enviar {
+            background: #1abc9c;
+            color: #0e161d;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 </style>
 </head>
 <body>
 <div id="wrapper">
-<div id="header">
-<div id="logo-container">
-    <img src="logo de la empresa.png" id="logo-imagen">
-    </div>
+    <div id="header">
+        <div id="logo-container">
+        <img src="logo de la empresa.png" id="logo-imagen">
+        </div>
 <div id="titulo-container">
-    <h1>INCOREA CABLES</h1>
-    <p id="sub-txt">CONTACTOS</p>
-    </div>
+        <h1>INCOREA CABLES</h1>
+        <p id="sub-txt">CONTACTOS</p>
+</div>
 </div>
 <div id="nav">
         <a href="index.html">INICIO</a>
@@ -91,52 +128,45 @@ body{
         <a href="global.html">GLOBAL</a>
         <a href="otros.html">OTROS</a>
         <a href="contactos.html">CONTACTOS</a>
-    </div>
+</div>
 <div class="contacto-wrapper">
 <div class="info-side">
-<h3>NUESTRA UBICACIÓN</h3>
-<p>
-    Quito, Ecuador<br>
-    Edificio Incorea Cables
-    </p>
-<h3>SÍGUENOS</h3>
-<div class="social-icons">
-<a href="https://www.facebook.com/incoreacablesec/" target="_blank">
-    <i class="fab fa-facebook"></i>
-    </a>
-<a href="https://www.instagram.com/incoreacables/" target="_blank">
-<i class="fab fa-instagram"></i>
-    </a>
-<a href="https://www.tiktok.com/@incoreacables/" target="_blank">
-<i class="fab fa-tiktok"></i>
-    </a>
-</div>
-<h3 style="margin-top:35px;">TELÉFONO</h3>
-<p>
-    +593 989290517<br>
-    info@incorea.com
-</p>
-<h3>HORARIOS</h3>
-<p>
-Lunes - Viernes<br>
-08:00 AM - 18:00 PM
-</p>
-<div class="card-extra">
-<div class="card-extra-text">
-<h2> Especialistas en cables eléctricos desde el 2000
-</h2>
-<p>
-    Incorea Cables ofrece soluciones industriales de alta calidad
-     para proyectos eléctricos, comerciales y corporativos,
-      brindando innovación, seguridad y confianza en cada conexión.
-     </p>
-     </div>
-     </div>
-     </div>
-</div>
-<div id="footer">
-<p>&copy; INCOREA CABLES</p>
-</div>
+            <h3>NUESTRA UBICACIÓN</h3>
+            <p>Quito, Ecuador<br>Edificio Incorea Cables</p>
+            <h3>SÍGUENOS</h3>
+            <div class="social-icons">
+            <a href="https://www.facebook.com/incoreacablesec/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/incoreacables/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@incoreacables/" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <h3 style="margin-top:35px;">TELÉFONO</h3>
+            <p>+593 989290517<br>info@incorea.com</p>
+    <h3>HORARIOS</h3>
+    <p>Lunes - Viernes<br>08:00 AM - 18:00 PM</p>
+    </div>
+    <div class="form-side">
+    <h3>UBICACIÓN EN MAPA</h3>
+    <div class="mapa-box">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.1738715875!2d-78.56839352467554!3d-0.18653229871146603!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d59a4002422cdd%3A0x1103646f4886702a!2sQuito!5e0!3m2!1ses!2sec!4v1700000000000!5m2!1ses!2sec" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <h3>ESCRÍBENOS</h3>
+    <form>
+                <div class="input-group"><input type="text" placeholder="Tu Nombre"></div>
+                <div class="input-group"><input type="email" placeholder="Tu Correo"></div>
+                <div class="input-group"><textarea rows="4" placeholder="¿En qué podemos ayudarte?"></textarea></div>
+    <button type="button" class="btn-enviar">ENVIAR MENSAJE</button>
+    </form>
+    </div>
+    <div class="card-extra" style="width: 100%;">
+    <div class="card-extra-text">
+    <h2>Especialistas en cables eléctricos desde el 2000</h2>
+    <p>Incorea Cables ofrece soluciones industriales de alta calidad para proyectos eléctricos, comerciales y corporativos, brindando innovación, seguridad y confianza en cada conexión.</p>
+    </div>
+    </div>
+    </div>
+ <div id="footer">
+    <p>&copy; INCOREA CABLES</p>
+    </div>
 </div>
 </body>
 </html>
