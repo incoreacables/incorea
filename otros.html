@@ -11,33 +11,53 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <style>
-        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; overflow-y: auto; }
-        .seccion-revista { max-width: 1100px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Visor extendido para ver todo el documento hacia abajo */
-        .visor-extendido { 
-            width: 100%; 
-            height: 9000px; /* Ajusta según el largo total de tus páginas */
-            background: transparent; 
-            border: none; 
-            margin-bottom: 50px; 
+        body { 
+            font-family: sans-serif; 
+            background: #0e161d; 
+            color: white; 
+            margin: 0;
+            overflow-y: auto; 
         }
-        iframe { width: 100%; height: 100%; border: none; }
+
+        .seccion-revista {
+            max-width: 1100px; 
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .visor-extendido {
+            width: 100%;
+            height: 8500px; 
+            background: transparent;
+            border: none;
+            margin-bottom: 50px;
+        }
+        
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none;
+        }
 
         .admin-footer {
             margin-top: 20px;
-            padding: 20px;
-            background: rgba(26, 188, 156, 0.05);
-            border-radius: 15px;
-            border: 1px dashed #1abc9c;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex-direction: column; /* Cambiado a columna para el cargador */
             align-items: center;
+            gap: 10px;
         }
-        .controles { display: flex; gap: 10px; align-items: center; }
-        #estado { font-size: 13px; color: #1abc9c; font-weight: bold; }
-        button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        .controles-subida { display: flex; gap: 10px; }
+        
+        .admin-footer input[type="text"] { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; }
+        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        #estadoSubida { font-size: 12px; color: #1abc9c; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -62,66 +82,72 @@
 
     <div class="seccion-revista">
         <div class="visor-extendido">
-            <iframe id="iframePDF" src="" scrolling="no"></iframe>
+            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW&scrollbar=0" scrolling="no"></iframe>
         </div>
 
         <div class="admin-footer">
-            <div class="controles">
-                <input type="file" id="inputArchivo" accept=".pdf" style="color:white;">
-                <button onclick="subirYActualizar()">SUBIR Y ACTUALIZAR REVISTA</button>
+            <div class="controles-subida">
+                <input type="file" id="inputArchivo" accept=".pdf" style="color:white; font-size: 12px;">
+                <button onclick="subirYActualizar()">SUBIR DE PC Y ACTUALIZAR</button>
             </div>
-            <div id="estado"></div>
+            <div id="estadoSubida"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // REEMPLAZA ESTOS DATOS CON LOS DE TU PROYECTO
+    // Configura aquí tus credenciales de Firebase
     const firebaseConfig = {
         databaseURL: "https://httpsincorea-cables-default-rtdb.firebaseio.com",
-        storageBucket: "httpsincorea-cables-default-rtdb.appspot.com" 
+        storageBucket: "httpsincorea-cables.appspot.com" 
     };
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const storage = firebase.storage();
 
-    // Cargar la revista guardada al iniciar
-    database.ref("archivoOtros/nombre").on("value", (snapshot) => {
-        const link = snapshot.val();
-        if(link) {
-            // Se usa FitW para que abarque todo el ancho
-            document.getElementById('iframePDF').src = link + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
-        }
-    });
+    // 1. Cargar el PDF actual al abrir la página
+    window.onload = async function() {
+        database.ref("archivoOtros/nombre").on("value", (snapshot) => {
+            const link = snapshot.val();
+            if(link) {
+                document.getElementById('iframePDF').src = link + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0";
+            }
+        });
+    };
 
+    // 2. Función para subir el archivo real y guardar el link
     async function subirYActualizar() {
         const file = document.getElementById('inputArchivo').files[0];
-        if(!file) return alert("Selecciona un PDF de tu PC primero.");
+        if(!file) return alert("Selecciona un archivo PDF de tu PC");
 
-        const pass = prompt("Clave de administrador:");
+        const pass = prompt("Clave:");
         if(pass === "1234") {
-            const estadoTxt = document.getElementById('estado');
-            estadoTxt.innerText = "Subiendo archivo... espera un momento.";
+            const estado = document.getElementById('estadoSubida');
+            estado.innerText = "Subiendo archivo... espera un momento.";
 
             try {
-                // 1. Subir el archivo al Storage
+                // Subir el archivo al Storage de Firebase
                 const storageRef = storage.ref('revistas/' + file.name);
-                await storageRef.put(file);
+                const task = await storageRef.put(file);
                 
-                // 2. Obtener el link público
+                // Obtener el link de internet del archivo recién subido
                 const urlDescarga = await storageRef.getDownloadURL();
 
-                // 3. Guardar el link en la base de datos
+                // Guardar ese link en la Base de Datos
                 await database.ref("archivoOtros").set({ nombre: urlDescarga });
 
-                estadoTxt.innerText = "¡Subida exitosa!";
-                alert("La revista se ha actualizado para todos.");
+                estado.innerText = "¡Actualizado con éxito!";
+                alert("Revista publicada correctamente.");
                 location.reload();
+
             } catch (error) {
                 console.error(error);
-                alert("Error al subir. Revisa si activaste el Storage en Firebase.");
+                alert("Error al subir. Asegúrate de tener activado 'Storage' en tu consola Firebase.");
+                estado.innerText = "";
             }
+        } else {
+            alert("Clave incorrecta");
         }
     }
 </script>
