@@ -7,89 +7,123 @@
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
-        .otros-container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
         
-        /* El contenedor del PDF */
-        .visor-pdf {
+        /* Contenedor principal para que ocupe todo el ancho */
+        .otros-full-container { 
+            width: 100%; 
+            margin: 0; 
+            padding: 0; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* El visor ahora ocupa todo el ancho y es más alto */
+        .visor-pdf-full {
             width: 100%;
-            height: 85vh;
-            background: #2a2a2a;
-            border-radius: 12px;
-            border: 1px solid #1abc9c33;
+            height: 90vh; /* Ocupa el 90% de la altura de la pantalla */
+            background: #1a1a1a;
+            border: none;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            margin-top: 20px;
+            display: block;
         }
         
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Cuadro de administración */
-        .admin-link {
-            background: rgba(26, 188, 156, 0.1);
-            padding: 15px;
-            border-radius: 8px;
+        /* Cuadro de administración pequeño y al final */
+        .admin-footer {
+            margin-top: 50px;
             margin-bottom: 20px;
-            display: inline-block;
-            border: 1px dashed #1abc9c;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 5px;
+            border: 1px solid rgba(26, 188, 156, 0.1);
         }
-        .admin-link input { padding: 8px; width: 280px; border-radius: 4px; border: none; outline: none; }
-        .admin-link button { padding: 8px 15px; background: #1abc9c; border: none; color: #0e161d; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .admin-footer input { 
+            padding: 5px; 
+            width: 180px; 
+            font-size: 12px;
+            background: #0e161d;
+            border: 1px solid #333;
+            color: #fff;
+            outline: none;
+        }
+        .admin-footer button { 
+            padding: 5px 10px; 
+            background: #1abc9c; 
+            border: none; 
+            color: #0e161d; 
+            font-size: 12px;
+            font-weight: bold; 
+            cursor: pointer; 
+        }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
+    <div id="header">
+        <div id="logo-container">
+            <img src="logo de la empresa.png" id="logo-imagen">
+        </div>
+        <div id="titulo-container">
+            <h1>INCOREA CABLES</h1>
+            <p id="sub-txt">OTROS RECURSOS</p>
+        </div>
+    </div>
+
     <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
+        <a href="global.html">GLOBAL</a>
         <a href="otros.html">OTROS</a>
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
-    <div class="otros-container">
-        <div class="admin-link">
-            <input type="text" id="nombreArchivo" placeholder="Nombre exacto (ej: revista.pdf)">
-            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
-        </div>
-
-        <div id="contenedorPDF" class="visor-pdf">
+    <div class="otros-full-container">
+        <div id="contenedorPDF" class="visor-pdf-full">
             <iframe id="iframePDF" src="" allow="autoplay"></iframe>
         </div>
+
+        <div class="admin-footer">
+            <input type="text" id="nombreArchivo" placeholder="Link o nombre.pdf">
+            <button onclick="actualizarBoletin()">CAMBIAR REVISTA</button>
+        </div>
+    </div>
+
+    <div id="footer">
+        <p>&copy; INCOREA CABLES</p>
     </div>
 </div>
 
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // Carga el PDF guardado y le quita las barras de herramientas
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // El secreto: agregamos los parámetros de limpieza al final del nombre
-                const linkLimpio = data.nombre + "#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
-                document.getElementById('iframePDF').src = linkLimpio;
+                // Mantenemos los parámetros para que se vea limpio (sin barras laterales)
+                const linkFinal = data.nombre + "#toolbar=0&navpanes=0&scrollbar=0";
+                document.getElementById('iframePDF').src = linkFinal;
             }
-        } catch (e) { console.error("Error al cargar:", e); }
+        } catch (e) { console.error(e); }
     };
 
-    // Función para guardar el nuevo nombre en Firebase
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
+        if(!nombre) return alert("Ingresa el nombre del archivo");
         
-        if(!nombre) return alert("Por favor, escribe el nombre del archivo.");
-        
-        const pass = prompt("Introduce la clave de administrador:");
+        const pass = prompt("Clave:");
         if(pass === "1234") {
             await fetch(DB_URL, {
                 method: 'PUT',
                 body: JSON.stringify({ nombre: nombre })
             });
-            alert("¡Revista actualizada correctamente!");
+            alert("Actualizado");
             location.reload();
-        } else {
-            alert("Clave incorrecta.");
         }
     }
 </script>
