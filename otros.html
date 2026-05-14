@@ -6,39 +6,34 @@
     <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        body { 
-            font-family: sans-serif; 
-            background: #0e161d; 
-            color: white; 
-            margin: 0;
-            overflow-x: hidden; 
-        }
+        /* Blindamos el contenedor para que nada del estilos.css lo afecte */
         .seccion-revista {
-            max-width: 1100px; 
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            max-width: 1100px !important; 
+            margin: 0 auto !important;
+            padding: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
         }
 
-        /* Contenedor fijo para 3 hojas: Eliminamos el scroll lateral forzado */
-        .visor-limpio {
-            width: 100%;
-            height: 2800px; 
-            background: #0e161d;
-            border: none;
-            margin-bottom: 50px;
-            overflow: hidden; /* Aquí matamos la barra lateral gris */
-            position: relative;
+        .visor-blindado {
+            width: 100% !important;
+            height: 2800px !important; /* Altura para 3 hojas */
+            background: #0e161d !important;
+            border: none !important;
+            margin-bottom: 50px !important;
+            overflow: hidden !important; /* MATA LA BARRA GRIS */
+            position: relative !important;
         }
         
-        /* Usamos object en lugar de iframe para tener más control sobre los plugins */
+        /* Forzamos al objeto a ignorar cualquier otro estilo */
         #pdfObject { 
-            width: 100%; 
-            height: 100%; 
-            border: none;
-            display: block;
+            width: 100% !important; 
+            height: 100% !important; 
+            border: none !important;
+            display: block !important;
+            /* El truco de subirlo un poco para esconder la cabecera del visor de Chrome */
+            margin-top: -40px !important; 
         }
 
         .admin-footer {
@@ -75,9 +70,9 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-limpio">
+        <div class="visor-blindado">
             <object id="pdfObject" data="" type="application/pdf">
-                <p>Tu navegador no puede mostrar este PDF. <a id="linkFallo" href="">Descárgalo aquí</a></p>
+                <embed id="pdfEmbed" src="" type="application/pdf" />
             </object>
         </div>
 
@@ -97,17 +92,19 @@
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Esta cadena de comandos es la que "limpia" el visor
+                // Forzamos los parámetros que desactivan herramientas y barras
                 const params = "#toolbar=0&navpanes=0&scrollbar=0&view=FitW&pagemode=none&t=" + timestamp;
                 const urlCompleta = data.nombre + params;
                 
-                document.getElementById('pdfObject').data = urlCompleta;
-                document.getElementById('linkFallo').href = data.nombre;
+                const obj = document.getElementById('pdfObject');
+                const emb = document.getElementById('pdfEmbed');
+                
+                obj.data = urlCompleta;
+                emb.src = urlCompleta;
             }
         } catch (e) { console.error(e); }
     }
 
-    // Ejecutamos la carga
     cargarRevista();
 
     async function actualizarBoletin() {
