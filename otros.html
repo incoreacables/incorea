@@ -6,41 +6,37 @@
     <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        body { 
-            font-family: sans-serif; 
-            background: #0e161d; 
-            color: white; 
-            margin: 0;
-        }
+        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
 
-        /* DISEÑO IGUAL AL DIRECTORIO */
+        /* EL CONTENEDOR (Igual al Directorio) */
         .visor-directo-container {
             margin: 20px 3%;
-            background: #0e161d; /* Color igual al fondo para borrar espacios */
-            backdrop-filter: blur(16px);
+            background: #000; 
             border: 2px solid rgba(26, 188, 156, 0.4);
             border-radius: 12px;
-            padding: 5px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+            overflow: hidden; /* Corta lo que sobra del zoom */
+            position: relative;
         }
 
+        /* EL TRUCO DEL ZOOM */
         .iframe-responsivo {
             width: 100%;
-            height: 85vh; /* Altura máxima para que asome bien */
-            background: #000;
-            border-radius: 8px;
+            height: 85vh;
+            position: relative;
             overflow: hidden;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
+        #visorPDF {
+            /* Hacemos el iframe un poco más ancho y alto que el cuadro para estirar el PDF */
+            width: 110%; 
+            height: 110%;
+            position: absolute;
+            top: -5%; /* Centramos el recorte arriba */
+            left: -5%; /* Centramos el recorte a los lados */
             border: none;
-            display: block;
         }
 
-        /* PANEL DE ACTUALIZACIÓN */
         .admin-panel {
             margin: 20px 5% 40px 5%;
             padding: 20px;
@@ -53,57 +49,18 @@
             border: 1px solid rgba(26, 188, 156, 0.2);
         }
 
-        .admin-panel input {
-            background: #1a252f;
-            border: 1px solid #333;
-            color: #1abc9c;
-            padding: 12px;
-            border-radius: 6px;
-            width: 280px;
-            outline: none;
-        }
-
-        .admin-panel button {
-            background: #1abc9c;
-            border: none;
-            color: #0e161d;
-            padding: 12px 25px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #footer { 
-            padding: 40px; 
-            text-align: center; 
-            background: #0e161d; 
-            border-top: 4px solid #1abc9c; 
-        }
+        .admin-panel input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 12px; border-radius: 6px; width: 250px; outline: none; }
+        .admin-panel button { background: #1abc9c; border: none; color: #0e161d; padding: 12px 25px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
-    <div id="header">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
-        <div id="titulo-container">
-            <h1>Calidad que conecta tus proyectos</h1>
-            <p>Estamos para ayudarte</p>
-        </div>
-    </div>
-
     <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
-        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
         <a href="global.html">GLOBAL</a>
         <a href="otros.html">MAGAZINE</a>
-        <a href="contactos.html">CONTACTOS</a>
-    </div>
-
-    <div id="comentarios-container" style="padding: 30px 5% 0 5%;">
-        <h2 style="color: #ffffff; font-family: sans-serif; font-weight: 800; font-size: 28px; margin: 0;">INCO MAGAZINE 2026</h2>
-        <p style="color: #1abc9c; font-weight: 600; font-size: 14px;">PUBLICACIONES RECIENTES</p>
     </div>
 
     <div class="visor-directo-container">
@@ -113,57 +70,41 @@
     </div>
 
     <div class="admin-panel">
-        <input type="text" id="nuevoArchivo" placeholder="Nombre del PDF (ej: revista.pdf)">
-        <button onclick="actualizarArchivo()">ACTUALIZAR MAGAZINE</button>
-    </div>
-
-    <div id="footer">
-        <p>&copy; INCOREA-CABLES</p>
+        <input type="text" id="nuevoPDF" placeholder="Nombre del archivo...">
+        <button onclick="cambiarRevista()">ACTUALIZAR</button>
     </div>
 </div>
 
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // Carga el PDF usando el visor de Google para evitar errores en móvil
-    async function cargarRevista() {
+    async function cargarPDF() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                const timestamp = new Date().getTime();
-                // Asegúrate de que esta URL sea la de tu sitio en GitHub
                 const urlArchivo = "https://incoreacables.github.io/incorea/" + data.nombre;
-                
-                // visor de Google con rm=minimal para quitar espacios blancos
-                const visorURL = "https://docs.google.com/viewer?url=" + 
-                                 encodeURIComponent(urlArchivo) + 
-                                 "&embedded=true&rm=minimal&t=" + timestamp;
+                // embedded=true y el timestamp para que no use caché
+                const visorGoogle = "https://docs.google.com/viewer?url=" + 
+                                    encodeURIComponent(urlArchivo) + 
+                                    "&embedded=true&rm=minimal&t=" + new Date().getTime();
 
-                document.getElementById('visorPDF').src = visorURL;
+                document.getElementById('visorPDF').src = visorGoogle;
             }
-        } catch (e) { console.error("Error:", e); }
+        } catch (e) { console.error(e); }
     }
 
-    // Función para cambiar el PDF con clave
-    async function actualizarArchivo() {
-        const nombre = document.getElementById('nuevoArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre del archivo");
-        
+    async function cambiarRevista() {
+        const nombre = document.getElementById('nuevoPDF').value.trim();
+        if(!nombre) return alert("Nombre vacío");
         const pass = prompt("Clave:");
         if(pass === "1234") {
-            await fetch(DB_URL, { 
-                method: 'PUT', 
-                body: JSON.stringify({ nombre: nombre }) 
-            });
-            alert("¡Actualizado!");
+            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
             location.reload();
-        } else {
-            alert("Clave incorrecta");
         }
     }
 
-    window.onload = cargarRevista;
+    cargarPDF();
 </script>
 
 </body>
