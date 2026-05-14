@@ -121,17 +121,13 @@ button:hover{
 
 <script>
 
-/* PROTECCIÓN */
-if(sessionStorage.getItem("login") === "ok"){
-    window.location.href = "index.html";
-}
-
 function entrar(){
 
     let clave = document.getElementById("clave").value;
 
-    /* TU CONTRASEÑA */
-    if(clave === "incorea1234"){
+    const pass = "aW5jb3JlYTEyMzQ=";
+
+    if(btoa(clave) === pass){
 
         sessionStorage.setItem("login","ok");
 
