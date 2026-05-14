@@ -3,48 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES</title>
+    <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        /* ESTILO IGUAL A TU DIRECTORIO */
+        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
+
+        /* CONTENEDOR IGUAL AL DIRECTORIO */
         .visor-directo-container {
-            margin: 30px 5%;
-            background: rgba(17, 29, 40, 0.75);
+            margin: 20px 5%;
+            background: #000; /* Fondo negro para camuflar bordes */
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 2px solid rgba(26, 188, 156, 0.4);
             border-radius: 12px;
-            padding: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            padding: 0; /* Quitamos padding para ganar espacio */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden; /* Corta el exceso del zoom */
+            position: relative;
         }
 
         .iframe-responsivo {
             position: relative;
             width: 100%;
-            height: 75vh;
-            border-radius: 8px;
+            height: 80vh; /* Altura ideal para móvil y PC */
             overflow: hidden;
-            background: #000; /* Fondo negro para que no se vea gris */
         }
 
-        .iframe-responsivo iframe {
-            width: 100%;
-            height: 100%;
+        /* EL TRUCO DEL ZOOM PARA QUITAR ESPACIOS */
+        #visorPDF {
+            position: absolute;
+            /* Hacemos el iframe más grande que el contenedor para estirar el PDF */
+            width: 112%; 
+            height: 108%;
+            top: -4%; 
+            left: -6%; 
             border: none;
-            /* Eliminamos el desplazamiento de 'top' para que no se corte el título del PDF */
         }
 
-        /* PANEL DE ACTUALIZACIÓN */
         .admin-panel {
-            margin: 20px 5%;
+            margin: 20px 5% 40px 5%;
             padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
+            border: 1px solid rgba(26, 188, 156, 0.2);
         }
-        .admin-panel input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 5px; width: 250px; }
-        .admin-panel button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        .admin-panel input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 6px; width: 250px; outline: none; }
+        .admin-panel button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -67,37 +75,47 @@
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
+    <div style="padding: 20px 5% 0 5%;">
+        <h2 style="color: #ffffff; margin: 0; font-size: 28px;">MAGAZINE 2026</h2>
+        <p style="color: #1abc9c; margin: 5px 0; font-size: 14px;">VISUALIZACIÓN DIRECTA</p>
+    </div>
+
     <div class="visor-directo-container">
         <div class="iframe-responsivo">
-            <iframe id="visorPDF" src="" allowfullscreen></iframe>
+            <iframe id="visorPDF" src=""></iframe>
         </div>
     </div>
 
     <div class="admin-panel">
-        <input type="text" id="nuevoPDF" placeholder="Nombre del archivo...">
-        <button onclick="cambiarRevista()">ACTUALIZAR</button>
+        <input type="text" id="nuevoArchivo" placeholder="Nombre del archivo (ej: revista.pdf)">
+        <button onclick="actualizar()">ACTUALIZAR</button>
     </div>
 </div>
 
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    async function cargarPDF() {
+    async function cargar() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                const timestamp = new Date().getTime();
-                // El secreto es "#view=FitW" al final, que fuerza al PDF a ajustarse al ancho (Width)
-                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
-                document.getElementById('visorPDF').src = urlFinal;
+                const urlArchivo = "https://incoreacables.github.io/incorea/" + data.nombre;
+                
+                // Usamos el visor de Google (funciona en TODO dispositivo)
+                // rm=minimal ayuda a reducir espacios, y el CSS de arriba hace el resto
+                const visorURL = "https://docs.google.com/viewer?url=" + 
+                                 encodeURIComponent(urlArchivo) + 
+                                 "&embedded=true&rm=minimal&t=" + new Date().getTime();
+
+                document.getElementById('visorPDF').src = visorURL;
             }
         } catch (e) { console.error(e); }
     }
 
-    async function cambiarRevista() {
-        const nombre = document.getElementById('nuevoPDF').value.trim();
-        if(!nombre) return alert("Nombre vacío");
+    async function actualizar() {
+        const nombre = document.getElementById('nuevoArchivo').value.trim();
+        if(!nombre) return alert("Escribe el nombre");
         const pass = prompt("Clave:");
         if(pass === "1234") {
             await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
@@ -105,7 +123,7 @@
         }
     }
 
-    cargarPDF();
+    window.onload = cargar;
 </script>
 
 </body>
