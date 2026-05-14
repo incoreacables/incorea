@@ -11,24 +11,29 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            overflow-y: auto; 
         }
+
+        /* Contenedor que se adapta a PC y Móvil */
         .seccion-revista {
+            width: 100%;
             max-width: 1100px; 
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Ajustado a 2800px para que abarque exactamente 3 hojas aproximadamente */
-        .visor-extendido {
+        /* Visor que asoma directamente sin descargar */
+        .visor-marco {
             width: 100%;
-            height: 2800px; 
-            background: transparent;
-            border: none;
-            margin-bottom: 50px;
+            height: 80vh; /* Se ajusta al alto de la pantalla del dispositivo */
+            background: #16232d;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
         
         iframe { 
@@ -37,17 +42,21 @@
             border: none;
         }
 
+        /* Admin organizado */
         .admin-footer {
-            margin-top: 20px;
+            width: 90%;
+            max-width: 500px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             border: 1px solid rgba(26, 188, 156, 0.2);
+            justify-content: center;
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
-        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 5px; flex: 1; min-width: 200px; }
+        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -71,19 +80,17 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-extendido">
-            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW&scrollbar=0" scrolling="no"></iframe>
+        <div class="visor-marco">
+            <iframe id="iframePDF" src=""></iframe>
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
-            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
+            <input type="text" id="nombreArchivo" placeholder="Nombre del PDF...">
+            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
         </div>
     </div>
 </div>
- <div id="footer">
-    <p>&copy;INCOREA-CABLES </p>
-</div>
+
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
@@ -92,9 +99,10 @@
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Truco para refrescar caché y ajustar al ancho
                 const timestamp = new Date().getTime();
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
+                // Forzamos la vista embebida para que no pida descarga
+                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
+                document.getElementById('iframePDF').src = urlFinal;
             }
         } catch (e) { console.error(e); }
     };
