@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+
+<style>
+body{
+  font-family: Arial;
+  text-align:center;
+  margin-top:100px;
+}
+
+input{
+  padding:10px;
+  font-size:16px;
+}
+
+button{
+  padding:10px 20px;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Ingrese la contraseña</h2>
+
+<input type="password" id="password">
+<button onclick="verificar()">Entrar</button>
+
+<p id="mensaje"></p>
+
+<script>
+function verificar() {
+
+  let clave = document.getElementById("password").value;
+
+  if(clave === "1234"){
+    document.body.innerHTML = `
+      <h1>Bienvenido</h1>
+      <p>Contenido privado</p>
+    `;
+  } else {
+    document.getElementById("mensaje").innerHTML =
+      "Contraseña incorrecta";
+  }
+}
+</script>
+
+</body>
+</html>
