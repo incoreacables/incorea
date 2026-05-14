@@ -22,24 +22,23 @@
             align-items: center;
         }
 
-        /* CONTENEDOR MAESTRO: Escondemos la barra por posición */
-        .visor-recortado {
+        /* Contenedor fijo para 3 hojas: Eliminamos el scroll lateral forzado */
+        .visor-limpio {
             width: 100%;
-            height: 2800px; /* Altura para 3 hojas */
-            overflow: hidden; /* Esto corta la barra gris */
-            position: relative;
-            background: #16232d;
+            height: 2800px; 
+            background: #0e161d;
+            border: none;
             margin-bottom: 50px;
+            overflow: hidden; /* Aquí matamos la barra lateral gris */
+            position: relative;
         }
         
-        /* EL IFRAME: Lo subimos un poco para que la barra quede "afuera" del cuadro */
-        iframe { 
+        /* Usamos object en lugar de iframe para tener más control sobre los plugins */
+        #pdfObject { 
             width: 100%; 
-            height: calc(100% + 56px); /* Le damos más altura para compensar el recorte */
+            height: 100%; 
             border: none;
-            position: absolute;
-            top: -56px; /* SUBIMOS EL PDF PARA ESCONDER SU BARRA GRIS */
-            left: 0;
+            display: block;
         }
 
         .admin-footer {
@@ -76,8 +75,10 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-recortado">
-            <iframe id="iframePDF" src=""></iframe>
+        <div class="visor-limpio">
+            <object id="pdfObject" data="" type="application/pdf">
+                <p>Tu navegador no puede mostrar este PDF. <a id="linkFallo" href="">Descárgalo aquí</a></p>
+            </object>
         </div>
 
         <div class="admin-footer">
@@ -90,18 +91,24 @@
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    document.addEventListener("DOMContentLoaded", async function() {
+    async function cargarRevista() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Mantenemos los parámetros por si acaso, pero el CSS hará el trabajo duro
-                const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
-                document.getElementById('iframePDF').src = pdfUrl;
+                // Esta cadena de comandos es la que "limpia" el visor
+                const params = "#toolbar=0&navpanes=0&scrollbar=0&view=FitW&pagemode=none&t=" + timestamp;
+                const urlCompleta = data.nombre + params;
+                
+                document.getElementById('pdfObject').data = urlCompleta;
+                document.getElementById('linkFallo').href = data.nombre;
             }
         } catch (e) { console.error(e); }
-    });
+    }
+
+    // Ejecutamos la carga
+    cargarRevista();
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
