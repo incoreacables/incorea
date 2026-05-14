@@ -11,7 +11,7 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            overflow-x: hidden; /* Evita movimientos laterales lentos */
+            overflow-x: hidden; 
         }
         .seccion-revista {
             max-width: 1100px; 
@@ -22,21 +22,20 @@
             align-items: center;
         }
 
-        /* Visor optimizado para 3 hojas sin barras internas */
         .visor-extendido {
             width: 100%;
-            height: 2800px; 
-            background: transparent;
+            height: 2800px; /* Tamaño para 3 hojas aprox */
+            background: #16232d;
             border: none;
             margin-bottom: 50px;
-            overflow: hidden; /* Quita la barra de aquí */
+            overflow: hidden; 
         }
         
         iframe { 
             width: 100%; 
             height: 100%; 
             border: none;
-            overflow: hidden; /* Quita la barra del PDF */
+            display: block;
         }
 
         .admin-footer {
@@ -93,19 +92,19 @@
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // Usamos DOMContentLoaded para que la página cargue los textos y el logo antes que el PDF pesado
+    // Carga asíncrona para que la web no sea lenta
     document.addEventListener("DOMContentLoaded", async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Limpiamos los parámetros del PDF para que no cargue herramientas pesadas de Adobe
+                // "toolbar=0" quita la barra gris molesta de Adobe
                 const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
                 document.getElementById('iframePDF').src = pdfUrl;
             }
         } catch (e) { 
-            console.error("Error cargando PDF:", e); 
+            console.error("Error:", e); 
         }
     });
 
@@ -114,12 +113,8 @@
         if(!nombre) return alert("Escribe el nombre");
         const pass = prompt("Clave:");
         if(pass === "1234") {
-            try {
-                await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-                location.reload();
-            } catch (e) {
-                alert("Error al guardar en la base de datos");
-            }
+            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
+            location.reload();
         }
     }
 </script>
