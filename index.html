@@ -148,5 +148,18 @@ if(sessionStorage.getItem("login") !== "ok"){
     <p>&copy;INCOREA-CABLES </p>
 </div>
 </div>
+    <button onclick="salir()">Cerrar sesión</button>
+
+<script>
+
+function salir(){
+
+    sessionStorage.removeItem("login");
+
+    window.location.href = "login.html";
+
+}
+
+</script>
 </body>
 </html>
