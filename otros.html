@@ -6,81 +6,103 @@
     <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        /* Blindamos el contenedor para que nada del estilos.css lo afecte */
-        .seccion-revista {
-            max-width: 1100px !important; 
-            margin: 0 auto !important;
-            padding: 20px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-        }
-
-        .visor-blindado {
-            width: 100% !important;
-            height: 2800px !important; /* Altura para 3 hojas */
-            background: #0e161d !important;
-            border: none !important;
-            margin-bottom: 50px !important;
-            overflow: hidden !important; /* MATA LA BARRA GRIS */
-            position: relative !important;
+        body { 
+            font-family: sans-serif; 
+            background: #0e161d; 
+            color: white; 
+            margin: 0;
+            overflow-x: hidden; 
         }
         
-        /* Forzamos al objeto a ignorar cualquier otro estilo */
-        #pdfObject { 
-            width: 100% !important; 
-            height: 100% !important; 
-            border: none !important;
-            display: block !important;
-            /* El truco de subirlo un poco para esconder la cabecera del visor de Chrome */
-            margin-top: -40px !important; 
+        /* Ajuste para que el contenedor no se rompa en el móvil */
+        .seccion-revista {
+            width: 100%;
+            max-width: 1100px; 
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* Visor responsivo: En PC alto, en móvil se ajusta */
+        .visor-contenedor {
+            width: 100%;
+            height: 80vh; /* Usa el 80% de la altura de la pantalla del celular o PC */
+            background: #16232d;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none;
+        }
+
+        /* Panel de admin que se ajusta al ancho del celular */
         .admin-footer {
-            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
+            flex-direction: column; /* Apila botones en móvil */
             gap: 10px;
             border: 1px solid rgba(26, 188, 156, 0.2);
+            box-sizing: border-box;
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
-        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        .admin-footer input { 
+            background: #1a252f; 
+            border: 1px solid #333; 
+            color: #1abc9c; 
+            padding: 10px; 
+            border-radius: 5px; 
+            outline: none;
+        }
+        
+        .admin-footer button { 
+            background: #1abc9c; 
+            border: none; 
+            color: #0e161d; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+
+        #footer { text-align: center; padding: 20px; color: #555; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
-    <div id="header">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
-        <div id="titulo-container">
-            <h1>INCOREA CABLES</h1>
-            <p id="sub-txt">REVISTA DIGITAL</p>
-        </div>
-    </div>
-
     <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
-        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-        <a href="global.html">GLOBAL</a>
         <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-blindado">
-            <object id="pdfObject" data="" type="application/pdf">
-                <embed id="pdfEmbed" src="" type="application/pdf" />
-            </object>
+        <div class="visor-contenedor">
+            <iframe id="iframePDF" src="" allow="autoplay"></iframe>
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
+            <input type="text" id="nombreArchivo" placeholder="Nombre del PDF (ej: revista.pdf)">
             <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
         </div>
     </div>
+</div>
+
+<div id="footer">
+    <p>&copy;INCOREA-CABLES </p>
 </div>
 
 <script>
@@ -92,15 +114,11 @@
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Forzamos los parámetros que desactivan herramientas y barras
-                const params = "#toolbar=0&navpanes=0&scrollbar=0&view=FitW&pagemode=none&t=" + timestamp;
-                const urlCompleta = data.nombre + params;
+                // Google Drive Viewer es el secreto para que cargue RÁPIDO y en CUALQUIER celular
+                // Solo si el archivo es público. Si es local, usamos la ruta normal:
+                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
                 
-                const obj = document.getElementById('pdfObject');
-                const emb = document.getElementById('pdfEmbed');
-                
-                obj.data = urlCompleta;
-                emb.src = urlCompleta;
+                document.getElementById('iframePDF').src = urlFinal;
             }
         } catch (e) { console.error(e); }
     }
