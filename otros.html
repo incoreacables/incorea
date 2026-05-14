@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES - MAGAZINE</title>
+    <title>INCOREA CABLES - Otros</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
+        /* ESTILO GLOBAL ADAPTABLE */
         body { 
             font-family: sans-serif; 
             background: #0e161d; 
             color: white; 
             margin: 0;
-            overflow-x: hidden; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        
-        /* Ajuste para que el contenedor no se rompa en el móvil */
+
+        /* Contenedor principal que se ajusta */
+        #wrapper { flex: 1; }
+
         .seccion-revista {
             width: 100%;
             max-width: 1100px; 
             margin: 0 auto;
-            padding: 10px;
+            padding: 15px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Visor responsivo: En PC alto, en móvil se ajusta */
+        /* VISOR RESPONSIVO: Se adapta a la pantalla del dispositivo */
         .visor-contenedor {
             width: 100%;
-            height: 80vh; /* Usa el 80% de la altura de la pantalla del celular o PC */
+            /* En PC se ve alto, en móvil usa el alto de la pantalla */
+            height: 80vh; 
+            min-height: 500px;
             background: #16232d;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             margin-bottom: 20px;
         }
         
@@ -43,18 +50,18 @@
             border: none;
         }
 
-        /* Panel de admin que se ajusta al ancho del celular */
+        /* Panel de admin que no se rompe en celular */
         .admin-footer {
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
-            flex-direction: column; /* Apila botones en móvil */
+            flex-wrap: wrap; /* Para que los botones bajen si no caben */
             gap: 10px;
             border: 1px solid rgba(26, 188, 156, 0.2);
-            box-sizing: border-box;
+            justify-content: center;
         }
         
         .admin-footer input { 
@@ -63,6 +70,8 @@
             color: #1abc9c; 
             padding: 10px; 
             border-radius: 5px; 
+            flex: 1; /* El input crece para llenar espacio */
+            min-width: 200px;
             outline: none;
         }
         
@@ -70,64 +79,76 @@
             background: #1abc9c; 
             border: none; 
             color: #0e161d; 
-            padding: 10px; 
+            padding: 10px 20px; 
             border-radius: 5px; 
             font-weight: bold; 
-            cursor: pointer; 
+            cursor: pointer;
         }
 
-        #footer { text-align: center; padding: 20px; color: #555; font-size: 12px; }
+        #footer { 
+            text-align: center; 
+            padding: 20px; 
+            background: #0a1015;
+            color: #555; 
+        }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
+    <div id="header">
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
+        <div id="titulo-container">
+            <h1>INCOREA CABLES</h1>
+            <p id="sub-txt">REVISTA DIGITAL</p>
+        </div>
+    </div>
+
     <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
+        <a href="global.html">GLOBAL</a>
         <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
     <div class="seccion-revista">
         <div class="visor-contenedor">
-            <iframe id="iframePDF" src="" allow="autoplay"></iframe>
+            <iframe id="iframePDF" src=""></iframe>
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del PDF (ej: revista.pdf)">
-            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
+            <input type="text" id="nombreArchivo" placeholder="Escribe el nombre del PDF...">
+            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
         </div>
     </div>
 </div>
 
 <div id="footer">
-    <p>&copy;INCOREA-CABLES </p>
+    <p>&copy; INCOREA-CABLES</p>
 </div>
 
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    async function cargarRevista() {
+    window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Google Drive Viewer es el secreto para que cargue RÁPIDO y en CUALQUIER celular
-                // Solo si el archivo es público. Si es local, usamos la ruta normal:
-                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
-                
-                document.getElementById('iframePDF').src = urlFinal;
+                // Parámetros para limpiar la interfaz del PDF
+                const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
+                document.getElementById('iframePDF').src = pdfUrl;
             }
-        } catch (e) { console.error(e); }
-    }
-
-    cargarRevista();
+        } catch (e) { console.error("Error cargando base de datos:", e); }
+    };
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre");
+        if(!nombre) return alert("Escribe el nombre del archivo");
+        
         const pass = prompt("Clave:");
         if(pass === "1234") {
             await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
