@@ -6,42 +6,29 @@
     <title>INCOREA CABLES - Otros</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        /* ESTILO GLOBAL ADAPTABLE */
         body { 
             font-family: sans-serif; 
             background: #0e161d; 
             color: white; 
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            overflow-y: auto; 
         }
-
-        /* Contenedor principal que se ajusta */
-        #wrapper { flex: 1; }
-
         .seccion-revista {
-            width: 100%;
             max-width: 1100px; 
             margin: 0 auto;
-            padding: 15px;
-            box-sizing: border-box;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* VISOR RESPONSIVO: Se adapta a la pantalla del dispositivo */
-        .visor-contenedor {
+        /* Ajustado a 2800px para que abarque exactamente 3 hojas aproximadamente */
+        .visor-extendido {
             width: 100%;
-            /* En PC se ve alto, en móvil usa el alto de la pantalla */
-            height: 80vh; 
-            min-height: 500px;
-            background: #16232d;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            margin-bottom: 20px;
+            height: 2800px; 
+            background: transparent;
+            border: none;
+            margin-bottom: 50px;
         }
         
         iframe { 
@@ -50,47 +37,17 @@
             border: none;
         }
 
-        /* Panel de admin que no se rompe en celular */
         .admin-footer {
-            width: 100%;
-            max-width: 500px;
+            margin-top: 20px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: flex;
-            flex-wrap: wrap; /* Para que los botones bajen si no caben */
             gap: 10px;
             border: 1px solid rgba(26, 188, 156, 0.2);
-            justify-content: center;
         }
-        
-        .admin-footer input { 
-            background: #1a252f; 
-            border: 1px solid #333; 
-            color: #1abc9c; 
-            padding: 10px; 
-            border-radius: 5px; 
-            flex: 1; /* El input crece para llenar espacio */
-            min-width: 200px;
-            outline: none;
-        }
-        
-        .admin-footer button { 
-            background: #1abc9c; 
-            border: none; 
-            color: #0e161d; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            font-weight: bold; 
-            cursor: pointer;
-        }
-
-        #footer { 
-            text-align: center; 
-            padding: 20px; 
-            background: #0a1015;
-            color: #555; 
-        }
+        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
+        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -114,21 +71,19 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-contenedor">
-            <iframe id="iframePDF" src=""></iframe>
+        <div class="visor-extendido">
+            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW&scrollbar=0" scrolling="no"></iframe>
         </div>
 
         <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Escribe el nombre del PDF...">
-            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
+            <input type="text" id="nombreArchivo" placeholder="Nombre del nuevo PDF...">
+            <button onclick="actualizarBoletin()">ACTUALIZAR REVISTA</button>
         </div>
     </div>
 </div>
-
-<div id="footer">
-    <p>&copy; INCOREA-CABLES</p>
+ <div id="footer">
+    <p>&copy;INCOREA-CABLES </p>
 </div>
-
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
@@ -137,18 +92,16 @@
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
+                // Truco para refrescar caché y ajustar al ancho
                 const timestamp = new Date().getTime();
-                // Parámetros para limpiar la interfaz del PDF
-                const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
-                document.getElementById('iframePDF').src = pdfUrl;
+                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
             }
-        } catch (e) { console.error("Error cargando base de datos:", e); }
+        } catch (e) { console.error(e); }
     };
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre del archivo");
-        
+        if(!nombre) return alert("Escribe el nombre");
         const pass = prompt("Clave:");
         if(pass === "1234") {
             await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
