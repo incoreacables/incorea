@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES - Otros</title>
+    <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
         body { 
@@ -13,60 +13,91 @@
             margin: 0;
         }
 
-        /* Contenedor que se adapta a PC y Móvil */
-        .seccion-revista {
-            width: 100%;
-            max-width: 1100px; 
-            margin: 0 auto;
+        /* ESTILO IGUAL AL DIRECTORIO */
+        .visor-directo-container {
+            margin: 30px 5%;
+            background: rgba(17, 29, 40, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(26, 188, 156, 0.4);
+            border-radius: 12px;
             padding: 10px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
 
-        /* Visor que asoma directamente sin descargar */
-        .visor-marco {
+        .iframe-responsivo {
+            position: relative;
             width: 100%;
-            height: 80vh; /* Se ajusta al alto de la pantalla del dispositivo */
-            background: #16232d;
+            height: 75vh; /* Altura adaptable */
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-        }
-        
-        iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none;
+            background: #000;
         }
 
-        /* Admin organizado */
-        .admin-footer {
-            width: 90%;
-            max-width: 500px;
-            padding: 15px;
+        .iframe-responsivo iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* PANEL DE ACTUALIZACIÓN */
+        .admin-panel {
+            margin: 20px 5% 40px 5%;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            border: 1px solid rgba(26, 188, 156, 0.2);
+            gap: 15px;
             justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(26, 188, 156, 0.2);
         }
-        .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 5px; flex: 1; min-width: 200px; }
-        .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        .admin-panel input {
+            background: #1a252f;
+            border: 1px solid #333;
+            color: #1abc9c;
+            padding: 12px;
+            border-radius: 6px;
+            width: 300px;
+            outline: none;
+        }
+
+        .admin-panel button {
+            background: #1abc9c;
+            border: none;
+            color: #0e161d;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .admin-panel button:hover {
+            background: #16a085;
+            transform: scale(1.02);
+        }
+
+        #footer { 
+            padding: 40px; 
+            text-align: center; 
+            background: #0e161d; 
+            border-top: 4px solid #1abc9c; 
+        }
     </style>
 </head>
 <body>
 
 <div id="wrapper">
     <div id="header">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo"></div>
         <div id="titulo-container">
-            <h1>INCOREA CABLES</h1>
-            <p id="sub-txt">REVISTA DIGITAL</p>
+            <h1>Calidad que conecta tus proyectos</h1>
+            <p>Estamos para ayudarte</p>
         </div>
     </div>
 
@@ -79,50 +110,66 @@
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
-    <div class="seccion-revista">
-        <div class="visor-marco">
-            <iframe id="iframePDF" src=""></iframe>
+    <div id="comentarios-container" style="padding: 40px 5% 10px 5%;">
+        <div class="comentarios-header" style="border-bottom: 2px solid #1c2b3a; padding-bottom: 20px; margin-bottom: 10px;">
+            <h2 style="color: #ffffff; letter-spacing: 1.5px; margin: 0; font-family: 'Segoe UI', sans-serif; font-weight: 800; font-size: 32px;">INCO MAGAZINE 2026</h2>
+            <p style="color: #1abc9c; margin-top: 5px; font-weight: 600; letter-spacing: 0.8px; font-size: 15px;">PUBLICACIONES RECIENTES</p>
         </div>
+    </div>
 
-        <div class="admin-footer">
-            <input type="text" id="nombreArchivo" placeholder="Nombre del PDF...">
-            <button onclick="actualizarBoletin()">ACTUALIZAR</button>
+    <div class="visor-directo-container">
+        <div class="iframe-responsivo">
+            <iframe id="visorPDF" src="" allowfullscreen></iframe>
         </div>
+    </div>
+
+    <div class="admin-panel">
+        <input type="text" id="nuevoPDF" placeholder="Nombre del archivo PDF (ej: revista.pdf)">
+        <button onclick="cambiarRevista()">ACTUALIZAR MAGAZINE</button>
+    </div>
+
+    <div id="footer">
+        <p>&copy; INCOREA-CABLES</p>
     </div>
 </div>
 
 <script>
+    // URL de tu base de datos Firebase
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
+    // CARGAR EL PDF AUTOMÁTICAMENTE AL ENTRAR
     window.onload = async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                
-                // URL original del archivo
-                const urlArchivo = window.location.origin + "/" + data.nombre;
-
-                // USAMOS EL VISOR DE GOOGLE para forzar que "asome" directamente
-                // Esto evita que salga el botón de "Abrir" o "Descargar" en el móvil
-                const visorGoogle = "https://docs.google.com/viewer?url=" + 
-                                    encodeURIComponent(urlArchivo) + 
-                                    "&embedded=true&t=" + timestamp;
-
-                document.getElementById('iframePDF').src = visorGoogle;
+                // Usamos el visor nativo del navegador con parámetros para ocultar barras
+                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
+                document.getElementById('visorPDF').src = urlFinal;
             }
-        } catch (e) { console.error("Error al cargar:", e); }
+        } catch (e) { console.error("Error cargando base de datos:", e); }
     };
 
-    async function actualizarBoletin() {
-        const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre del archivo");
+    // FUNCIÓN PARA CAMBIAR EL ARCHIVO
+    async function cambiarRevista() {
+        const nombre = document.getElementById('nuevoPDF').value.trim();
+        if(!nombre) return alert("Por favor, ingresa el nombre del archivo PDF");
         
-        const pass = prompt("Clave:");
+        const pass = prompt("Ingresa la clave de administrador:");
         if(pass === "1234") {
-            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-            location.reload();
+            try {
+                await fetch(DB_URL, { 
+                    method: 'PUT', 
+                    body: JSON.stringify({ nombre: nombre }) 
+                });
+                alert("¡Magazine actualizado correctamente!");
+                location.reload();
+            } catch (e) {
+                alert("Error al conectar con la base de datos");
+            }
+        } else {
+            alert("Clave incorrecta");
         }
     }
 </script>
