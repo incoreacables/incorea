@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES - Otros</title>
+    <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
         body { 
@@ -22,20 +22,24 @@
             align-items: center;
         }
 
-        .visor-extendido {
+        /* CONTENEDOR MAESTRO: Escondemos la barra por posición */
+        .visor-recortado {
             width: 100%;
-            height: 2800px; /* Tamaño para 3 hojas aprox */
+            height: 2800px; /* Altura para 3 hojas */
+            overflow: hidden; /* Esto corta la barra gris */
+            position: relative;
             background: #16232d;
-            border: none;
             margin-bottom: 50px;
-            overflow: hidden; 
         }
         
+        /* EL IFRAME: Lo subimos un poco para que la barra quede "afuera" del cuadro */
         iframe { 
             width: 100%; 
-            height: 100%; 
+            height: calc(100% + 56px); /* Le damos más altura para compensar el recorte */
             border: none;
-            display: block;
+            position: absolute;
+            top: -56px; /* SUBIMOS EL PDF PARA ESCONDER SU BARRA GRIS */
+            left: 0;
         }
 
         .admin-footer {
@@ -49,8 +53,6 @@
         }
         .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
         .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
-        #footer { text-align: center; padding: 20px; color: #555; }
     </style>
 </head>
 <body>
@@ -74,7 +76,7 @@
     </div>
 
     <div class="seccion-revista">
-        <div class="visor-extendido">
+        <div class="visor-recortado">
             <iframe id="iframePDF" src=""></iframe>
         </div>
 
@@ -85,27 +87,20 @@
     </div>
 </div>
 
-<div id="footer">
-    <p>&copy;INCOREA-CABLES </p>
-</div>
-
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // Carga asíncrona para que la web no sea lenta
     document.addEventListener("DOMContentLoaded", async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // "toolbar=0" quita la barra gris molesta de Adobe
+                // Mantenemos los parámetros por si acaso, pero el CSS hará el trabajo duro
                 const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
                 document.getElementById('iframePDF').src = pdfUrl;
             }
-        } catch (e) { 
-            console.error("Error:", e); 
-        }
+        } catch (e) { console.error(e); }
     });
 
     async function actualizarBoletin() {
