@@ -2,51 +2,113 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>Página Protegida</title>
 
 <style>
 body{
-  font-family: Arial;
-  text-align:center;
-  margin-top:100px;
+    font-family: Arial;
+    text-align:center;
+    margin-top:100px;
+    background:#f2f2f2;
+}
+
+.caja{
+    background:white;
+    width:300px;
+    margin:auto;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
 input{
-  padding:10px;
-  font-size:16px;
+    width:90%;
+    padding:10px;
+    margin-top:10px;
 }
 
 button{
-  padding:10px 20px;
-  font-size:16px;
+    margin-top:15px;
+    padding:10px 20px;
+    cursor:pointer;
+}
+
+#error{
+    color:red;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<h2>Ingrese la contraseña</h2>
+<div class="caja" id="login">
 
-<input type="password" id="password">
-<button onclick="verificar()">Entrar</button>
+    <h2>Ingrese la contraseña</h2>
 
-<p id="mensaje"></p>
+    <input type="password" id="clave" placeholder="Contraseña">
+
+    <br>
+
+    <button onclick="entrar()">Entrar</button>
+
+    <p id="error"></p>
+
+</div>
+
+<div id="contenido" style="display:none;">
+
+    <h1>Bienvenido</h1>
+
+    <p>Tu página privada aquí</p>
+
+    <button onclick="salir()">Cerrar sesión</button>
+
+</div>
 
 <script>
-function verificar() {
 
-  let clave = document.getElementById("password").value;
+const PASSWORD = "1234";
 
-  if(clave === "1234"){
-    document.body.innerHTML = `
-      <h1>Bienvenido</h1>
-      <p>Contenido privado</p>
-    `;
-  } else {
-    document.getElementById("mensaje").innerHTML =
-      "Contraseña incorrecta";
-  }
+function entrar(){
+
+    let clave = document.getElementById("clave").value;
+
+    if(clave === PASSWORD){
+
+        localStorage.setItem("acceso","ok");
+
+        mostrarContenido();
+
+    }else{
+
+        document.getElementById("error").innerHTML =
+        "Contraseña incorrecta";
+
+    }
 }
+
+function mostrarContenido(){
+
+    document.getElementById("login").style.display = "none";
+
+    document.getElementById("contenido").style.display = "block";
+
+}
+
+function salir(){
+
+    localStorage.removeItem("acceso");
+
+    location.reload();
+
+}
+
+if(localStorage.getItem("acceso") === "ok"){
+
+    mostrarContenido();
+
+}
+
 </script>
 
 </body>
