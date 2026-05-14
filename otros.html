@@ -103,6 +103,35 @@
     </div>
 </div>
 
+<style>
+    /* ... (tus otros estilos se mantienen igual) ... */
+
+    .visor-directo-container {
+        margin: 20px 5%; /* Reducimos el margen para ganar espacio */
+        background: #0e161d; /* Fondo igual al body para camuflar huecos */
+        backdrop-filter: blur(16px);
+        border: 2px solid rgba(26, 188, 156, 0.4);
+        border-radius: 12px;
+        padding: 5px; /* Menos padding interno */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .iframe-responsivo {
+        width: 100%;
+        height: 85vh; /* Aumentamos la altura para que ocupe más pantalla */
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #visorPDF {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
@@ -113,32 +142,19 @@
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
                 
-                // Construimos la URL completa de tu GitHub
-                const urlBase = "https://incoreacables.github.io/incorea/"; 
-                const urlArchivo = urlBase + data.nombre;
+                // URL de tu repositorio en GitHub
+                const urlArchivo = "https://incoreacables.github.io/incorea/" + data.nombre;
 
-                // VISOR DE GOOGLE: Esto es lo que quita el botón de "Abrir"
+                // VISOR OPTIMIZADO: rm=minimal quita menús de Google y aprovecha el espacio
                 const visorGoogle = "https://docs.google.com/viewer?url=" + 
                                     encodeURIComponent(urlArchivo) + 
-                                    "&embedded=true&t=" + timestamp;
+                                    "&embedded=true&rm=minimal&t=" + timestamp;
 
                 document.getElementById('visorPDF').src = visorGoogle;
             }
         } catch (e) { console.error(e); }
     }
-
-    async function cambiarRevista() {
-        const nombre = document.getElementById('nuevoPDF').value.trim();
-        if(!nombre) return alert("Escribe el nombre del archivo");
-        const pass = prompt("Clave:");
-        if(pass === "1234") {
-            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-            location.reload();
-        }
-    }
-
     cargarPDF();
 </script>
-
 </body>
 </html>
