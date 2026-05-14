@@ -11,7 +11,7 @@
             background: #0e161d; 
             color: white; 
             margin: 0;
-            overflow-y: auto; 
+            overflow-x: hidden; /* Evita movimientos laterales lentos */
         }
         .seccion-revista {
             max-width: 1100px; 
@@ -22,19 +22,21 @@
             align-items: center;
         }
 
-        /* Ajustado a 2800px para que abarque exactamente 3 hojas aproximadamente */
+        /* Visor optimizado para 3 hojas sin barras internas */
         .visor-extendido {
             width: 100%;
             height: 2800px; 
             background: transparent;
             border: none;
             margin-bottom: 50px;
+            overflow: hidden; /* Quita la barra de aquí */
         }
         
         iframe { 
             width: 100%; 
             height: 100%; 
             border: none;
+            overflow: hidden; /* Quita la barra del PDF */
         }
 
         .admin-footer {
@@ -48,6 +50,8 @@
         }
         .admin-footer input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 8px; border-radius: 5px; width: 300px; outline: none; }
         .admin-footer button { background: #1abc9c; border: none; color: #0e161d; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        #footer { text-align: center; padding: 20px; color: #555; }
     </style>
 </head>
 <body>
@@ -72,7 +76,7 @@
 
     <div class="seccion-revista">
         <div class="visor-extendido">
-            <iframe id="iframePDF" src="Inco Magazine_Edición 003_Abr2026.pdf#toolbar=0&navpanes=0&view=FitW&scrollbar=0" scrolling="no"></iframe>
+            <iframe id="iframePDF" src=""></iframe>
         </div>
 
         <div class="admin-footer">
@@ -81,31 +85,41 @@
         </div>
     </div>
 </div>
- <div id="footer">
+
+<div id="footer">
     <p>&copy;INCOREA-CABLES </p>
 </div>
+
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    window.onload = async function() {
+    // Usamos DOMContentLoaded para que la página cargue los textos y el logo antes que el PDF pesado
+    document.addEventListener("DOMContentLoaded", async function() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
-                // Truco para refrescar caché y ajustar al ancho
                 const timestamp = new Date().getTime();
-                document.getElementById('iframePDF').src = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
+                // Limpiamos los parámetros del PDF para que no cargue herramientas pesadas de Adobe
+                const pdfUrl = data.nombre + "#toolbar=0&navpanes=0&view=FitW&scrollbar=0&t=" + timestamp;
+                document.getElementById('iframePDF').src = pdfUrl;
             }
-        } catch (e) { console.error(e); }
-    };
+        } catch (e) { 
+            console.error("Error cargando PDF:", e); 
+        }
+    });
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
         if(!nombre) return alert("Escribe el nombre");
         const pass = prompt("Clave:");
         if(pass === "1234") {
-            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-            location.reload();
+            try {
+                await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
+                location.reload();
+            } catch (e) {
+                alert("Error al guardar en la base de datos");
+            }
         }
     }
 </script>
