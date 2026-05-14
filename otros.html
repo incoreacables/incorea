@@ -100,16 +100,25 @@
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Forzamos la vista embebida para que no pida descarga
-                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
-                document.getElementById('iframePDF').src = urlFinal;
+                
+                // URL original del archivo
+                const urlArchivo = window.location.origin + "/" + data.nombre;
+
+                // USAMOS EL VISOR DE GOOGLE para forzar que "asome" directamente
+                // Esto evita que salga el botón de "Abrir" o "Descargar" en el móvil
+                const visorGoogle = "https://docs.google.com/viewer?url=" + 
+                                    encodeURIComponent(urlArchivo) + 
+                                    "&embedded=true&t=" + timestamp;
+
+                document.getElementById('iframePDF').src = visorGoogle;
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Error al cargar:", e); }
     };
 
     async function actualizarBoletin() {
         const nombre = document.getElementById('nombreArchivo').value.trim();
-        if(!nombre) return alert("Escribe el nombre");
+        if(!nombre) return alert("Escribe el nombre del archivo");
+        
         const pass = prompt("Clave:");
         if(pass === "1234") {
             await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
