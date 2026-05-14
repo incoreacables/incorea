@@ -6,13 +6,8 @@
     <title>INCOREA CABLES - MAGAZINE</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        body { 
-            font-family: sans-serif; 
-            background: #0e161d; 
-            color: white; 
-            margin: 0;
-        }
-
+        body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
+        
         /* ESTILO IGUAL AL DIRECTORIO */
         .visor-directo-container {
             margin: 30px 5%;
@@ -29,7 +24,7 @@
         .iframe-responsivo {
             position: relative;
             width: 100%;
-            height: 75vh; /* Altura adaptable */
+            height: 75vh;
             border-radius: 8px;
             overflow: hidden;
             background: #000;
@@ -42,9 +37,9 @@
             display: block;
         }
 
-        /* PANEL DE ACTUALIZACIÓN */
+        /* PANEL PARA CAMBIAR ARCHIVO */
         .admin-panel {
-            margin: 20px 5% 40px 5%;
+            margin: 20px 5%;
             padding: 20px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -52,7 +47,6 @@
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
-            align-items: center;
             border: 1px solid rgba(26, 188, 156, 0.2);
         }
 
@@ -62,7 +56,7 @@
             color: #1abc9c;
             padding: 12px;
             border-radius: 6px;
-            width: 300px;
+            width: 250px;
             outline: none;
         }
 
@@ -74,19 +68,6 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .admin-panel button:hover {
-            background: #16a085;
-            transform: scale(1.02);
-        }
-
-        #footer { 
-            padding: 40px; 
-            text-align: center; 
-            background: #0e161d; 
-            border-top: 4px solid #1abc9c; 
         }
     </style>
 </head>
@@ -110,13 +91,6 @@
         <a href="contactos.html">CONTACTOS</a>
     </div>
 
-    <div id="comentarios-container" style="padding: 40px 5% 10px 5%;">
-        <div class="comentarios-header" style="border-bottom: 2px solid #1c2b3a; padding-bottom: 20px; margin-bottom: 10px;">
-            <h2 style="color: #ffffff; letter-spacing: 1.5px; margin: 0; font-family: 'Segoe UI', sans-serif; font-weight: 800; font-size: 32px;">INCO MAGAZINE 2026</h2>
-            <p style="color: #1abc9c; margin-top: 5px; font-weight: 600; letter-spacing: 0.8px; font-size: 15px;">PUBLICACIONES RECIENTES</p>
-        </div>
-    </div>
-
     <div class="visor-directo-container">
         <div class="iframe-responsivo">
             <iframe id="visorPDF" src="" allowfullscreen></iframe>
@@ -124,54 +98,46 @@
     </div>
 
     <div class="admin-panel">
-        <input type="text" id="nuevoPDF" placeholder="Nombre del archivo PDF (ej: revista.pdf)">
+        <input type="text" id="nuevoPDF" placeholder="Nombre del archivo (ej: revista.pdf)">
         <button onclick="cambiarRevista()">ACTUALIZAR MAGAZINE</button>
-    </div>
-
-    <div id="footer">
-        <p>&copy; INCOREA-CABLES</p>
     </div>
 </div>
 
 <script>
-    // URL de tu base de datos Firebase
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
 
-    // CARGAR EL PDF AUTOMÁTICAMENTE AL ENTRAR
-    window.onload = async function() {
+    async function cargarPDF() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const timestamp = new Date().getTime();
-                // Usamos el visor nativo del navegador con parámetros para ocultar barras
-                const urlFinal = data.nombre + "#toolbar=0&navpanes=0&view=FitW&t=" + timestamp;
-                document.getElementById('visorPDF').src = urlFinal;
-            }
-        } catch (e) { console.error("Error cargando base de datos:", e); }
-    };
+                
+                // Construimos la URL completa de tu GitHub
+                const urlBase = "https://incoreacables.github.io/incorea/"; 
+                const urlArchivo = urlBase + data.nombre;
 
-    // FUNCIÓN PARA CAMBIAR EL ARCHIVO
+                // VISOR DE GOOGLE: Esto es lo que quita el botón de "Abrir"
+                const visorGoogle = "https://docs.google.com/viewer?url=" + 
+                                    encodeURIComponent(urlArchivo) + 
+                                    "&embedded=true&t=" + timestamp;
+
+                document.getElementById('visorPDF').src = visorGoogle;
+            }
+        } catch (e) { console.error(e); }
+    }
+
     async function cambiarRevista() {
         const nombre = document.getElementById('nuevoPDF').value.trim();
-        if(!nombre) return alert("Por favor, ingresa el nombre del archivo PDF");
-        
-        const pass = prompt("Ingresa la clave de administrador:");
+        if(!nombre) return alert("Escribe el nombre del archivo");
+        const pass = prompt("Clave:");
         if(pass === "1234") {
-            try {
-                await fetch(DB_URL, { 
-                    method: 'PUT', 
-                    body: JSON.stringify({ nombre: nombre }) 
-                });
-                alert("¡Magazine actualizado correctamente!");
-                location.reload();
-            } catch (e) {
-                alert("Error al conectar con la base de datos");
-            }
-        } else {
-            alert("Clave incorrecta");
+            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
+            location.reload();
         }
     }
+
+    cargarPDF();
 </script>
 
 </body>
