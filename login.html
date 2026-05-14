@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+
+<body style="font-family:Arial;text-align:center;margin-top:100px;">
+
+<h2>Ingrese contraseña</h2>
+
+<input type="password" id="clave">
+<button onclick="entrar()">Entrar</button>
+
+<p id="msg"></p>
+
+<script>
+
+const PASSWORD = "1234";
+
+function entrar(){
+
+    let clave = document.getElementById("clave").value;
+
+    if(clave === PASSWORD){
+
+        sessionStorage.setItem("login","ok");
+
+        window.location.href = "index.html";
+
+    }else{
+
+        document.getElementById("msg").innerHTML =
+        "Clave incorrecta";
+
+    }
+}
+
+</script>
+
+</body>
+</html>
