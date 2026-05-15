@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>INCOREA LOGIN</title>
-
 <style>
-
 body{
     margin:0;
     padding:0;
@@ -17,7 +15,6 @@ body{
     background:#0f1f2f;
     overflow:hidden;
 }
-
 body::before{
     content:"";
     position:absolute;
@@ -29,7 +26,6 @@ body::before{
     background-position:center;
     filter:blur(2px);
 }
-
 .login-box{
     position:relative;
     width:350px;
@@ -41,24 +37,20 @@ body::before{
     box-shadow:0 0 25px rgba(18,214,197,0.4);
     animation:aparecer 1s ease;
 }
-
 .logo{
     font-size:55px;
     color:#12d6c5;
     font-weight:bold;
     margin-bottom:10px;
 }
-
 .logo span{
     color:white;
 }
-
 h2{
     color:white;
     margin-bottom:30px;
     letter-spacing:2px;
 }
-
 input{
     width:100%;
     padding:14px;
@@ -72,11 +64,9 @@ input{
     border:1px solid #12d6c5;
     box-sizing:border-box;
 }
-
 input:focus{
     box-shadow:0 0 10px #12d6c5;
 }
-
 button{
     width:100%;
     padding:14px;
@@ -89,17 +79,14 @@ button{
     cursor:pointer;
     transition:0.3s;
 }
-
 button:hover{
     background:white;
     transform:scale(1.03);
 }
-
 #msg{
     color:#ff5c5c;
     margin-top:15px;
 }
-
 @keyframes aparecer{
     from{
         opacity:0;
@@ -110,51 +97,29 @@ button:hover{
         transform:translateY(0);
     }
 }
-
 </style>
-
 <script>
-
 function entrar(){
-
-    let clave = document.getElementById("clave").value;
-
-    const pass = "aW5jb3JlYTEyMzQ=";
-
-    if(btoa(clave) === pass){
-
-        sessionStorage.setItem("login","ok");
-
-        window.location.href = "index.html";
-
-    }else{
-
-        document.getElementById("msg").innerHTML =
-        "Contraseña incorrecta";
-
-    }
+let clave = document.getElementById("clave").value;
+const pass = "aW5jb3JlYTEyMzQ=";
+if(btoa(clave) === pass){
+sessionStorage.setItem("login","ok");
+window.location.href = "index.html";
+}else{
+document.getElementById("msg").innerHTML =
+"Contraseña incorrecta";
 }
-
+}
 </script>
-
 </head>
-
 <body>
-
 <div class="login-box">
-
 <div class="logo">Incorea <span>Cables</span></div>
-
 <h2>ACCESO PRIVADO</h2>
-
 <input type="password" id="clave" placeholder="Ingrese contraseña">
-
 <button onclick="entrar()">INGRESAR</button>
-
 <p id="msg"></p>
-
 </div>
-
 </body>
 </html>
 
