@@ -143,8 +143,15 @@ button {
     let archivosHtml = "";
     if(r.archivos) {
     Object.keys(r.archivos).forEach(idF => {
-    const f = r.archivos[idF];
-    const dLink = f.link.split('?')[0].replace("redir", "download") + "?download=1";
+   const f = r.archivos[idF];
+// Extraemos el ID del archivo de Google Drive para crear el enlace de descarga directa
+let fileId = f.link.match(/[-\w]{25,}/);
+let dLink = fileId ? `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+
+archivosHtml += `
+<div class="archivo">
+    <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
+</div>`;
     archivosHtml += `
     <div class="archivo">
     <a href="${dLink}" target="_blank">📄 ${f.nombre}</a>
