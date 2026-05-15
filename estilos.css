@@ -1,4 +1,3 @@
-
 body, html { 
     margin: 0; padding: 0; 
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; 
@@ -6,7 +5,6 @@ body, html {
     color: #ecf0f1; 
     scroll-behavior: smooth; 
 }
-
 #header { 
     background-color: #1a252f !important; 
     padding: 20px 5%;
@@ -17,25 +15,21 @@ body, html {
     height: 120px;
     overflow: hidden;
 }
-
 #logo-container, .logo-indi { 
     display: flex; 
     align-items: center; 
     animation: latidoSutilLogo 5s ease-in-out infinite; 
 }
-
 #logo-imagen { 
     height: 90px; 
     width: auto; 
     filter: drop-shadow(0 0 5px rgba(26, 188, 156, 0.2)); 
 }
-
 #titulo-container { 
     text-align: right; 
     line-height: 1.1;
     animation: slideInRight 1.5s ease-out forwards; 
 }
-
 #titulo-container h1 { 
     margin: 0; 
     font-size: 32px; 
@@ -45,7 +39,6 @@ body, html {
     animation: respiracionLetras 4s ease-in-out infinite; 
     display: inline-block; 
 }
-
 #titulo-container p { 
     margin: 0; 
     font-size: 16px; 
@@ -54,14 +47,12 @@ body, html {
     letter-spacing: 2px;
     opacity: 0.9;
 }
-
 #nav { 
     background: #1c2b3a; 
     display: flex; 
     justify-content: center; 
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-
 #nav a { 
     color: #bdc3c7 !important; 
     padding: 18px 30px; 
@@ -70,12 +61,10 @@ body, html {
     font-size: 14px;
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
 }
-
 #nav a:hover { 
     background: #1abc9c !important; 
     color: white !important; 
 }
-
 #footer {
     clear: both; 
     padding: 40px; 
@@ -83,7 +72,6 @@ body, html {
     background: #0e161d; 
     border-top: 4px solid #1abc9c;
 }
-
 .hero-dinamico {
     padding: 60px 5%;
     display: flex; 
@@ -91,7 +79,6 @@ body, html {
     align-items: center; 
     text-align: center;
 }
-
 .hero-overlay h2 {
     font-size: 48px; 
     color: #ffffff; 
@@ -100,7 +87,6 @@ body, html {
     display: inline-block; 
     animation: brilloLatido 3s ease-in-out infinite, flotar 4s ease-in-out infinite;
 }
-
 .btn-brillante { 
     background: #1abc9c; 
     color: white !important; 
@@ -115,13 +101,11 @@ body, html {
     box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
     transition: 0.3s;
 }
-
 .btn-brillante:hover {
     background: #17d3ad;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(26, 188, 156, 0.5);
 }
-
 .servicios-grid { 
     display: flex; 
     flex-wrap: wrap; 
@@ -129,7 +113,6 @@ body, html {
     gap: 30px; 
     padding: 50px 5%; 
 }
-
 .servicio-card-pro { 
     background: rgba(44, 62, 80, 0.4) !important; 
     backdrop-filter: blur(12px);
@@ -149,14 +132,12 @@ body, html {
     min-height: 450px; 
     box-sizing: border-box;
 }
-
 .servicio-card-pro:hover {
     transform: scale(1.03) translateY(-10px);
     background: rgba(44, 62, 80, 0.6) !important;
     border-color: rgba(26, 188, 156, 0.5) !important;
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
-
 .servicio-card-pro h4 {
     font-family: 'Segoe UI', sans-serif !important;
     font-size: 1.8rem;
@@ -166,7 +147,6 @@ body, html {
     letter-spacing: 0.5px;
     transition: color 0.3s;
 }
-
 .servicio-card-pro:hover h4 {
     color: #1abc9c !important;
 }
@@ -175,7 +155,6 @@ body, html {
     box-shadow: 0 0 30px rgba(26, 188, 156, 0.6) !important;
     animation: pulso-brillo 2s infinite;
 }
-
 .comentarios-header {
     display: flex;
     justify-content: space-between;
@@ -184,7 +163,6 @@ body, html {
     border-bottom: 2px solid #34495e;
     padding-bottom: 15px;
 }
-
 .tabla-wrapper {
     background: rgba(44, 62, 80, 0.5);
     backdrop-filter: blur(10px);
@@ -192,7 +170,6 @@ body, html {
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.05);
 }
-
 .tabla-gestion th {
     background: #1c2b3a;
     color: #1abc9c;
@@ -200,46 +177,37 @@ body, html {
     text-transform: uppercase;
     font-size: 12px;
 }
-
 .fila-dinamica:hover {
     background: rgba(26, 188, 156, 0.08);
 }
-
 .badge {
     padding: 6px 15px;
     border-radius: 6px;
     font-size: 11px;
     font-weight: bold;
 }
-
 .recibido { background: #f1c40f; color: #000; }
 .visto { background: #2ecc71; color: #fff; }
-
 @keyframes latidoSutilLogo {
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(26, 188, 156, 0.2)); }
     50% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(26, 188, 156, 0.5)); }
 }
-
 @keyframes slideInRight {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
-
 @keyframes respiracionLetras {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.02); text-shadow: 0 0 15px rgba(26, 188, 156, 0.4); }
 }
-
 @keyframes brilloLatido {
     0%, 100% { color: #ffffff; text-shadow: none; }
     50% { color: #1abc9c; text-shadow: 0 0 15px rgba(26, 188, 156, 0.7); }
 }
-
 @keyframes flotar {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
-
 @keyframes pulso-brillo {
     0%, 100% { box-shadow: 0 0 15px #1abc9c; }
     50% { box-shadow: 0 0 35px #1abc9c; }
