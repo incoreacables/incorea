@@ -6,15 +6,11 @@
     <title>INCOREA CABLES - Gestión</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
-
 if(sessionStorage.getItem("login") !== "ok"){
-
-    window.location.href = "login.html";
-
+window.location.href = "login.html";
 }
-
 </script>
-    <style>
+<style>
        body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: #0e161d; 
@@ -22,7 +18,6 @@ if(sessionStorage.getItem("login") !== "ok"){
             margin: 0; 
         }
 .container { margin: 20px 5%; min-height: 300px; }
-        
         .rama { margin-bottom: 25px; }
         .rama-t { 
             color: #1abc9c; 
@@ -40,16 +35,13 @@ if(sessionStorage.getItem("login") !== "ok"){
         .archivo:hover { border-left-color: #1abc9c; background: rgba(26, 188, 156, 0.05); }
         .archivo a { color: #eee; text-decoration: none; font-size: 15px; }
         .archivo a:hover { color: #1abc9c; }
-
-       
-        .admin-zona {  
+.admin-zona {  
             background: rgba(255, 255, 255, 0.02);
             padding: 30px 5%; 
             border-top: 1px solid #1a252f;
             margin-top: 60px; 
         }
         .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
-        
         input, select { 
             background: #16212b; 
             border: 1px solid #34495e; 
@@ -59,8 +51,7 @@ if(sessionStorage.getItem("login") !== "ok"){
             outline: none;
         }
         input:focus { border-color: #1abc9c; }
-
-        button { 
+button { 
             background: transparent; 
             border: 1px solid #1abc9c; 
             color: #1abc9c; 
@@ -71,7 +62,6 @@ if(sessionStorage.getItem("login") !== "ok"){
             transition: 0.3s; 
         }
         button:hover { background: #1abc9c; color: #0e161d; }
-        
         #gestion { 
             display: none; 
             max-width: 900px; 
@@ -102,8 +92,7 @@ if(sessionStorage.getItem("login") !== "ok"){
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
         <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-    
-        <a href="otros.html">MAGAZINE</a>
+    <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
 </nav>
 <main class="container" id="visor">
@@ -132,8 +121,7 @@ if(sessionStorage.getItem("login") !== "ok"){
 </footer>
 </div>
 <script>
- 
-    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
+  const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
     const ADMIN_KEY = "12345"; 
     function clean(str) {
     return str.replace(/[<>]/g, "").trim();
