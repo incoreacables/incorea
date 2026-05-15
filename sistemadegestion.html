@@ -107,7 +107,7 @@
         Object.keys(globalData).forEach(idR => {
             const r = globalData[idR];
             let html = `<div class="carpeta-root">
-                <div class="titulo-c">📂 ${r.nombre}</div>
+                <div class="titulo-c"> ${r.nombre}</div>
                 <div class="rama-hijo">`; /* Eliminado el ID y el toggle */
             
             if(r.archivos) {
@@ -129,7 +129,7 @@
                     `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
 
                 html += `<div class="link-item">
-                    <a href="${dLink}" download>📄 ${f.nombre}</a>
+                    <a href="${dLink}" download> ${f.nombre}</a>
                     <div class="rama-hijo">
                         ${buildTree(archivos, idF)}
                     </div>
