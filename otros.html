@@ -18,20 +18,20 @@ if(sessionStorage.getItem("login") !== "ok"){
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
         .visor-directo-container {
             margin: 20px 5%;
-            background: #000; /* Fondo negro para camuflar bordes */
+            background: #000; 
             backdrop-filter: blur(16px);
             border: 2px solid rgba(26, 188, 156, 0.4);
             border-radius: 12px;
-            padding: 0; /* Quitamos padding para ganar espacio */
+            padding: 0; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden; /* Corta el exceso del zoom */
+            overflow: hidden; 
             position: relative;
         }
 
         .iframe-responsivo {
             position: relative;
             width: 100%;
-            height: 80vh; /* Altura ideal para móvil y PC */
+            height: 80vh; 
             overflow: hidden;
         }
 
@@ -112,8 +112,7 @@ if(sessionStorage.getItem("login") !== "ok"){
             if(data && data.nombre) {
                 const urlArchivo = "https://incoreacables.github.io/incorea/" + data.nombre;
                 
-                // Usamos el visor de Google (funciona en TODO dispositivo)
-                // rm=minimal ayuda a reducir espacios, y el CSS de arriba hace el resto
+                
                 const visorURL = "https://docs.google.com/viewer?url=" + 
                                  encodeURIComponent(urlArchivo) + 
                                  "&embedded=true&rm=minimal&t=" + new Date().getTime();
