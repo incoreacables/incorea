@@ -120,111 +120,66 @@ button {
 <p>&copy; INCOREA CABLES</p>
 </footer>
 </div>
-<script>
-  const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
-    const ADMIN_KEY = "12345"; 
-    function clean(str) {
-    return str.replace(/[<>]/g, "").trim();
-    }
-  window.onload = load;
-  async function load() {
-  try {
-     const res = await fetch(`${DB_URL}.json`);
-     const data = await res.json();
-     const visor = document.getElementById('visor');
-     const select = document.getElementById('rd');
-     const listaG = document.getElementById('listaG');
-    visor.innerHTML = ""; listaG.innerHTML = "";
-    select.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
-    if(data) {
-    Object.keys(data).forEach(idR => {
-    const r = data[idR];
-    select.innerHTML += `<option value="${idR}">${r.nombre}</option>`;               
-    let archivosHtml = "";
-    if(r.archivos) {
-    Object.keys(r.archivos).forEach(idF => {
-   const f = r.archivos[idF];
-// Extraemos el ID del archivo de Google Drive para crear el enlace de descarga directa
-let fileId = f.link.match(/[-\w]{25,}/);
-let dLink = fileId ? `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+async function load() {
+    try {
+      const res = await fetch(`${DB_URL}.json`);
+      const data = await res.json();
+      const visor = document.getElementById('visor');
+      const select = document.getElementById('rd');
+      const listaG = document.getElementById('listaG');
 
-archivosHtml += `
-<div class="archivo">
-    <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
-</div>`;
-    archivosHtml += `
-    <div class="archivo">
-    <a href="${dLink}" target="_blank">📄 ${f.nombre}</a>
-    </div>`; 
-    listaG.innerHTML += `
-    <div class="edit-item">
-    <span>Archivo: ${f.nombre}</span>
-<div>
-<button onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">Editar</button>
-<button onclick="delF('${idR}','${idF}')" style="color:red; border-color:red;">Eliminar</button>
-</div>
-</div>`;
-});
-}
-visor.innerHTML += `
-<div class="rama">
-<div class="rama-t">${r.nombre}</div>
-${archivosHtml}
-</div>`;
-        listaG.innerHTML += `
-        <div class="edit-item" style="background:rgba(26,188,156,0.1)">
-        <strong>CARPETA: ${r.nombre}</strong>
-        <div>
-        <button onclick="upR('${idR}','${r.nombre}')">Renombrar</button>
-        <button onclick="delR('${idR}')" style="color:red; border-color:red;">Borrar Todo</button>
-        </div>
-        </div>`;
+      // Limpiamos todo antes de construir para que no se duplique
+      visor.innerHTML = ""; 
+      listaG.innerHTML = "";
+      select.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+
+      if(data) {
+        Object.keys(data).forEach(idR => {
+          const r = data[idR];
+          select.innerHTML += `<option value="${idR}">${r.nombre}</option>`;                
+          
+          let archivosHtml = "";
+          if(r.archivos) {
+            Object.keys(r.archivos).forEach(idF => {
+              const f = r.archivos[idF];
+              
+              // Cambio para descarga directa de Google Drive
+              let fileId = f.link.match(/[-\w]{25,}/);
+              let dLink = fileId ? `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+
+              archivosHtml += `
+                <div class="archivo">
+                  <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
+                </div>`; 
+
+              listaG.innerHTML += `
+                <div class="edit-item">
+                  <span>Archivo: ${f.nombre}</span>
+                  <div>
+                    <button onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">Editar</button>
+                    <button onclick="delF('${idR}','${idF}')" style="color:red; border-color:red;">Eliminar</button>
+                  </div>
+                </div>`;
+            });
+          }
+
+          visor.innerHTML += `
+            <div class="rama">
+              <div class="rama-t">${r.nombre}</div>
+              ${archivosHtml}
+            </div>`;
+
+          listaG.innerHTML += `
+            <div class="edit-item" style="background:rgba(26,188,156,0.1)">
+              <strong>CARPETA: ${r.nombre}</strong>
+              <div>
+                <button onclick="upR('${idR}','${r.nombre}')">Renombrar</button>
+                <button onclick="delR('${idR}')" style="color:red; border-color:red;">Borrar Todo</button>
+              </div>
+            </div>`;
         });
-        }
-        } catch (e) { console.error("Error cargando base de datos", e); }
-}
-function auth() {
-const pass = prompt("Introduzca clave de acceso:");
-return pass === ADMIN_KEY;
-}
-        function verG() { 
-        if(auth()) document.getElementById('gestion').style.display = "block"; 
-        }
-async function saveR() {
-        const id = document.getElementById('editIdR').value;
-        const n = clean(document.getElementById('rn').value);
-        if(!n) return alert("Nombre obligatorio");
-        if(!auth()) return;
-        
-        const method = id ? 'PATCH' : 'POST';
-        const url = id ? `${DB_URL}/${id}.json` : `${DB_URL}.json`;
-        await fetch(url, { method, body: JSON.stringify({nombre: n}) });
-        reset(); load();
-        }
-async function saveF() {
-        const idR = document.getElementById('rd').value;
-        const idF = document.getElementById('editIdF').value;
-        const n = clean(document.getElementById('fn').value);
-        const l = clean(document.getElementById('fl').value);
-        if(!idR || !n || !l) return alert("Faltan datos");
-        if(!auth()) return;
-        const method = idF ? 'PATCH' : 'POST';
-        const url = idF ? `${DB_URL}/${idR}/archivos/${idF}.json` : `${DB_URL}/${idR}/archivos.json`;
-        await fetch(url, { method, body: JSON.stringify({nombre: n, link: l}) });
-        reset(); load();
-    }
-function reset() {
-document.querySelectorAll('input').forEach(i => i.value = "");
-    }
-function upR(id, n) { document.getElementById('editIdR').value = id; document.getElementById('rn').value = n; }
-function upF(idR, idF, n, l) { 
-        document.getElementById('rd').value = idR; 
-        document.getElementById('editIdF').value = idF; 
-        document.getElementById('fn').value = n; 
-        document.getElementById('fl').value = l; 
-    }
-    async function delR(id) { if(confirm("¿Borrar carpeta?") && auth()) { await fetch(`${DB_URL}/${id}.json`, { method:'DELETE' }); load(); } }
-    async function delF(idR, idF) { if(confirm("¿Borrar archivo?") && auth()) { await fetch(`${DB_URL}/${idR}/archivos/${idF}.json`, { method:'DELETE' }); load(); } }
-</script>
+      }
+    } catch (e) { console.error("Error cargando base de datos", e); }
+  }
 </body>
 </html>
