@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES - Gestión</title>
+    <title>INCOREA CABLES - Gestión Jerárquica</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
         if(sessionStorage.getItem("login") !== "ok"){ window.location.href = "login.html"; }
@@ -12,184 +12,162 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0e161d; color: white; margin: 0; }
         .container { margin: 20px 5%; min-height: 300px; }
         
-        /* BARRA DE NAVEGACIÓN ORIGINAL */
-        #nav { 
-            background: #1a252f; 
-            padding: 10px; 
-            display: flex; 
-            justify-content: center; 
-            gap: 20px; 
-            border-bottom: 2px solid #1abc9c;
-        }
-        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        #nav a:hover { color: #1abc9c; }
+        /* MENU NAV */
+        #nav { background: #1a252f; padding: 10px; display: flex; justify-content: center; gap: 20px; border-bottom: 2px solid #1abc9c; }
+        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; }
 
-        /* ESTILO DESPLEGABLE (ACORDEÓN) */
-        .rama { margin-bottom: 10px; background: rgba(255, 255, 255, 0.03); border-radius: 5px; overflow: hidden; }
-        .rama-t { 
-            color: #1abc9c; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            padding: 15px; 
-            cursor: pointer; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(26, 188, 156, 0.05);
-            transition: 0.3s;
-        }
-        .rama-t:hover { background: rgba(26, 188, 156, 0.1); }
-        .rama-t::after { content: '▼'; font-size: 0.8rem; opacity: 0.5; }
+        /* ESTRUCTURA DE RAMAS */
+        .carpeta-root { margin-bottom: 15px; background: rgba(255,255,255,0.02); border-radius: 8px; padding: 10px; }
+        .titulo-c { color: #1abc9c; font-weight: bold; font-size: 1.2rem; cursor: pointer; padding: 10px; border-bottom: 1px solid #1abc9c33; }
         
-        .archivos-lista { 
-            display: none; 
-            padding: 10px 20px;
-            border-top: 1px solid rgba(26, 188, 156, 0.1);
-        }
+        .rama-hijo { margin-left: 25px; border-left: 1px solid #34495e; padding-left: 15px; display: none; }
+        
+        .link-item { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .link-item a { color: #eee; text-decoration: none; font-size: 14px; }
+        .link-item a:hover { color: #1abc9c; }
+        .btn-expand { color: #f1c40f; cursor: pointer; font-size: 12px; margin-right: 5px; }
 
-        .archivo { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .archivo a { color: #eee; text-decoration: none; font-size: 15px; display: block; }
-        .archivo a:hover { color: #1abc9c; }
-
-        /* PANEL ADMIN */
-        .admin-zona { background: rgba(255, 255, 255, 0.02); padding: 30px 5%; border-top: 1px solid #1a252f; margin-top: 60px; }
+        /* ADMIN */
+        .admin-zona { background: rgba(0,0,0,0.3); padding: 30px 5%; border-top: 1px solid #1a252f; margin-top: 50px; }
         .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
-        input, select { background: #16212b; border: 1px solid #34495e; color: #fff; padding: 8px 12px; border-radius: 5px; outline: none; }
-        button { background: transparent; border: 1px solid #1abc9c; color: #1abc9c; padding: 8px 16px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+        input, select { background: #16212b; border: 1px solid #34495e; color: #fff; padding: 8px; border-radius: 5px; }
+        button { background: transparent; border: 1px solid #1abc9c; color: #1abc9c; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; }
         button:hover { background: #1abc9c; color: #0e161d; }
-        #gestion { display: none; max-width: 900px; margin: 20px auto; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; }
-        .edit-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #1a252f; font-size: 13px; }
     </style>
 </head>
 <body>
 <div id="wrapper">
-    <header id="header" style="text-align: center; padding: 20px;">
-        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo Incorea"></div>
+    <header style="text-align: center; padding: 20px;">
+        <img src="logo de la empresa.png" width="150">
         <h1>INCOREA CABLES</h1>
-        <p>Sistema de Documentación</p>
     </header>
 
     <nav id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
-        <a href="sistemadegestion.html" style="color: #1abc9c;">SISTEMA DE GESTIÓN</a>
+        <a href="sistemadegestion.html" style="color:#1abc9c">GESTIÓN</a>
         <a href="otros.html">MAGAZINE</a>
-        <a href="contactos.html">CONTACTOS</a>
     </nav>
 
     <main class="container" id="visor"></main>
 
     <section class="admin-zona">
         <div class="inputs">
-            <input type="hidden" id="editIdR"> 
-            <input type="text" id="rn" placeholder="Nombre de Carpeta">
-            <button onclick="saveR()">CREAR CARPETA</button>
-            <button onclick="verG()" style="border-color:#555; color:#aaa;">MODO ADMIN</button>
+            <input type="text" id="rn" placeholder="Nombre de Carpeta Nueva">
+            <button onclick="saveR()">+ CARPETA</button>
         </div>
-        <div class="inputs">
-            <input type="hidden" id="editIdF"> 
-            <select id="rd"></select>
-            <input type="text" id="fn" placeholder="Nombre del Documento">
-            <input type="text" id="fl" placeholder="URL de Google Drive">
-            <button onclick="saveF()">SUBIR ARCHIVO</button>
+
+        <div class="inputs" style="background: rgba(26, 188, 156, 0.05); padding: 15px; border-radius: 10px;">
+            <select id="rd" onchange="updatePadres()"></select> <select id="padreId"><option value="">Sin Link Padre (Raíz)</option></select> <input type="text" id="fn" placeholder="Nombre del Documento">
+            <input type="text" id="fl" placeholder="URL Drive">
+            <button onclick="saveF()">SUBIR A LA RAMA</button>
+            <button onclick="verG()" style="border-color:#555; color:#aaa;">ADMIN</button>
         </div>
-        <div id="gestion"><div id="listaG"></div></div>
+        <div id="gestion" style="display:none;"><div id="listaG"></div></div>
     </section>
 </div>
 
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
-    const ADMIN_KEY = "12345"; 
+    const ADMIN_KEY = "12345";
+    let globalData = {};
 
-    function clean(str) { return str ? str.replace(/[<>]/g, "").trim() : ""; }
     window.onload = load;
 
-    // Función para el desplazamiento (abrir/cerrar)
-    function toggleRama(elemento) {
-        const lista = elemento.nextElementSibling;
-        const estaAbierto = lista.style.display === "block";
-        lista.style.display = estaAbierto ? "none" : "block";
+    async function load() {
+        const res = await fetch(`${DB_URL}.json`);
+        globalData = await res.json() || {};
+        renderVisor();
+        renderSelects();
     }
 
-    async function load() {
-        try {
-            const res = await fetch(`${DB_URL}.json`);
-            const data = await res.json();
-            const visor = document.getElementById('visor');
-            const select = document.getElementById('rd');
-            const listaG = document.getElementById('listaG');
-
-            visor.innerHTML = ""; listaG.innerHTML = "";
-            select.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
-
-            if(data) {
-                Object.keys(data).forEach(idR => {
-                    const r = data[idR];
-                    select.innerHTML += `<option value="${idR}">${r.nombre}</option>`;                
-                    
-                    let archivosHtml = "";
-                    if(r.archivos) {
-                        Object.keys(r.archivos).forEach(idF => {
-                            const f = r.archivos[idF];
-                            let fileId = f.link.match(/[-\w]{25,}/);
-                            let dLink = (fileId && f.link.includes("drive.google.com")) ? 
-                                `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
-
-                            archivosHtml += `
-                                <div class="archivo">
-                                    <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
-                                </div>`; 
-
-                            listaG.innerHTML += `
-                                <div class="edit-item">
-                                    <span>${f.nombre}</span>
-                                    <div>
-                                        <button onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">✏️</button>
-                                        <button onclick="delF('${idR}','${idF}')" style="color:red; border-color:red;">🗑️</button>
-                                    </div>
-                                </div>`;
-                        });
-                    }
-
-                    visor.innerHTML += `
-                        <div class="rama">
-                            <div class="rama-t" onclick="toggleRama(this)">${r.nombre}</div>
-                            <div class="archivos-lista">${archivosHtml || '<p style="font-size:12px; opacity:0.5;">Carpeta vacía</p>'}</div>
-                        </div>`;
-                });
+    function renderVisor() {
+        const visor = document.getElementById('visor');
+        visor.innerHTML = "";
+        
+        Object.keys(globalData).forEach(idR => {
+            const r = globalData[idR];
+            let html = `<div class="carpeta-root">
+                <div class="titulo-c" onclick="toggleRama('root-${idR}')">📂 ${r.nombre}</div>
+                <div id="root-${idR}" class="rama-hijo">`;
+            
+            if(r.archivos) {
+                html += buildTree(r.archivos);
             }
-        } catch (e) { console.error(e); }
+            
+            html += `</div></div>`;
+            visor.innerHTML += html;
+        });
+    }
+
+    // Función recursiva para crear ramas infinitas de links
+    function buildTree(archivos, padreId = "") {
+        let html = "";
+        Object.keys(archivos).forEach(idF => {
+            const f = archivos[idF];
+            if ((f.padre || "") === padreId) {
+                let fileId = f.link.match(/[-\w]{25,}/);
+                let dLink = fileId ? `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+
+                html += `<div class="link-item">
+                    <span class="btn-expand" onclick="toggleRama('hijo-${idF}')">▶</span>
+                    <a href="${dLink}" download>📄 ${f.nombre}</a>
+                    <div id="hijo-${idF}" class="rama-hijo">
+                        ${buildTree(archivos, idF)}
+                    </div>
+                </div>`;
+            }
+        });
+        return html;
+    }
+
+    function renderSelects() {
+        const selectR = document.getElementById('rd');
+        selectR.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+        Object.keys(globalData).forEach(id => {
+            selectR.innerHTML += `<option value="${id}">${globalData[id].nombre}</option>`;
+        });
+    }
+
+    function updatePadres() {
+        const idR = document.getElementById('rd').value;
+        const selectP = document.getElementById('padreId');
+        selectP.innerHTML = '<option value="">Sin Link Padre (Raíz)</option>';
+        if(idR && globalData[idR].archivos) {
+            Object.keys(globalData[idR].archivos).forEach(idF => {
+                selectP.innerHTML += `<option value="${idF}">Debajo de: ${globalData[idR].archivos[idF].nombre}</option>`;
+            });
+        }
+    }
+
+    function toggleRama(id) {
+        const el = document.getElementById(id);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
     }
 
     async function saveF() {
         const idR = document.getElementById('rd').value;
-        const idF = document.getElementById('editIdF').value;
-        const n = clean(document.getElementById('fn').value);
-        const l = clean(document.getElementById('fl').value);
-        if(!idR || !n || !l || !auth()) return alert("Faltan datos");
-        const url = idF ? `${DB_URL}/${idR}/archivos/${idF}.json` : `${DB_URL}/${idR}/archivos.json`;
-        await fetch(url, { method: idF ? 'PATCH' : 'POST', body: JSON.stringify({nombre: n, link: l}) });
-        reset(); load();
+        const pId = document.getElementById('padreId').value;
+        const n = document.getElementById('fn').value.trim();
+        const l = document.getElementById('fl').value.trim();
+        if(!idR || !n || !l || !auth()) return;
+
+        await fetch(`${DB_URL}/${idR}/archivos.json`, { 
+            method: 'POST', 
+            body: JSON.stringify({nombre: n, link: l, padre: pId}) 
+        });
+        load();
     }
 
     async function saveR() {
-        const n = clean(document.getElementById('rn').value);
+        const n = document.getElementById('rn').value.trim();
         if(!n || !auth()) return;
         await fetch(`${DB_URL}.json`, { method: 'POST', body: JSON.stringify({nombre: n}) });
-        reset(); load();
+        load();
     }
 
-    function auth() { const p = prompt("Clave:"); return p === ADMIN_KEY; }
+    function auth() { return prompt("Clave:") === ADMIN_KEY; }
     function verG() { if(auth()) document.getElementById('gestion').style.display = "block"; }
-    function reset() { document.querySelectorAll('input').forEach(i => i.value = ""); }
-    function upF(idR, idF, n, l) { 
-        document.getElementById('rd').value = idR; 
-        document.getElementById('editIdF').value = idF; 
-        document.getElementById('fn').value = n; 
-        document.getElementById('fl').value = l; 
-    }
-    async function delR(id) { if(confirm("¿Borrar?") && auth()) { await fetch(`${DB_URL}/${id}.json`, { method:'DELETE' }); load(); } }
-    async function delF(idR, idF) { if(confirm("¿Borrar?") && auth()) { await fetch(`${DB_URL}/${idR}/archivos/${idF}.json`, { method:'DELETE' }); load(); } }
 </script>
 </body>
 </html>
