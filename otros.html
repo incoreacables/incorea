@@ -6,13 +6,9 @@
     <title>INCOREA CABLES</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
-
 if(sessionStorage.getItem("login") !== "ok"){
-
-    window.location.href = "login.html";
-
+window.location.href = "login.html";
 }
-
 </script>
     <style>
         body { font-family: sans-serif; background: #0e161d; color: white; margin: 0; }
@@ -27,25 +23,21 @@ if(sessionStorage.getItem("login") !== "ok"){
             overflow: hidden; 
             position: relative;
         }
-
-        .iframe-responsivo {
+.iframe-responsivo {
             position: relative;
             width: 100%;
             height: 80vh; 
             overflow: hidden;
         }
-
-        #visorPDF {
+#visorPDF {
             position: absolute;
-           
-            width: 112%; 
+           width: 112%; 
             height: 108%;
             top: -4%; 
             left: -6%; 
             border: none;
         }
-
-        .admin-panel {
+.admin-panel {
             margin: 20px 5% 40px 5%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
@@ -56,13 +48,11 @@ if(sessionStorage.getItem("login") !== "ok"){
             justify-content: center;
             border: 1px solid rgba(26, 188, 156, 0.2);
         }
-
-        .admin-panel input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 6px; width: 250px; outline: none; }
+.admin-panel input { background: #1a252f; border: 1px solid #333; color: #1abc9c; padding: 10px; border-radius: 6px; width: 250px; outline: none; }
         .admin-panel button { background: #1abc9c; border: none; color: #0e161d; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
 <div id="wrapper">
     <div id="header">
         <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen"></div>
@@ -71,69 +61,55 @@ if(sessionStorage.getItem("login") !== "ok"){
             <p>Estamos para ayudarte</p>
         </div>
     </div>
-
-    <div id="nav">
+<div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
         <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-      
-        <a href="otros.html">MAGAZINE</a>
+      <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
     </div>
-
-    <div style="padding: 20px 5% 0 5%;">
+<div style="padding: 20px 5% 0 5%;">
         <h2 style="color: #ffffff; margin: 0; font-size: 28px;">MAGAZINE 2026</h2>
         <p style="color: #1abc9c; margin: 5px 0; font-size: 14px;">VISUALIZACIÓN DIRECTA</p>
     </div>
-
-    <div class="visor-directo-container">
+<div class="visor-directo-container">
         <div class="iframe-responsivo">
             <iframe id="visorPDF" src=""></iframe>
         </div>
     </div>
-
-    <div class="admin-panel">
+<div class="admin-panel">
         <input type="text" id="nuevoArchivo" placeholder="Nombre del archivo (ej: revista.pdf)">
         <button onclick="actualizar()">ACTUALIZAR</button>
     </div>
 </div>
 <div id="footer" style="clear: both; padding: 40px; text-align: center; background: #0e161d; border-top: 4px solid #1abc9c;">
-
-    <p>&copy;INCOREA-CABLES </p>
-
+<p>&copy;INCOREA-CABLES </p>
 </div>
 <script>
     const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/archivoOtros.json";
-
-    async function cargar() {
+async function cargar() {
         try {
             const res = await fetch(DB_URL);
             const data = await res.json();
             if(data && data.nombre) {
                 const urlArchivo = "https://incoreacables.github.io/incorea/" + data.nombre;
-                
-                
                 const visorURL = "https://docs.google.com/viewer?url=" + 
-                                 encodeURIComponent(urlArchivo) + 
-                                 "&embedded=true&rm=minimal&t=" + new Date().getTime();
-
-                document.getElementById('visorPDF').src = visorURL;
-            }
-        } catch (e) { console.error(e); }
-    }
-
-    async function actualizar() {
+                encodeURIComponent(urlArchivo) + 
+                "&embedded=true&rm=minimal&t=" + new Date().getTime();
+document.getElementById('visorPDF').src = visorURL;
+}
+} catch (e) { console.error(e); }
+}
+async function actualizar() {
         const nombre = document.getElementById('nuevoArchivo').value.trim();
         if(!nombre) return alert("Escribe el nombre");
         const pass = prompt("Clave:");
         if(pass === "1234") {
-            await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
-            location.reload();
+        await fetch(DB_URL, { method: 'PUT', body: JSON.stringify({ nombre: nombre }) });
+        location.reload();
         }
     }
-
-    window.onload = cargar;
+window.onload = cargar;
 </script>
-
 </body>
 </html>
