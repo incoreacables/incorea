@@ -3,78 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INCOREA CABLES - Sistema de Gestión</title>
+    <title>INCOREA CABLES - Gestión Sólida</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
         if(sessionStorage.getItem("login") !== "ok"){ window.location.href = "login.html"; }
     </script>
     <style>
-        /* ESTILOS BASE (Iguales al Inicio) */
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0e161d; color: white; margin: 0; overflow-x: hidden; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0e161d; color: white; margin: 0; }
+        .container { margin: 20px 5%; min-height: 300px; }
         
-        /* HEADER Y NAV (Copiados del primer link) */
+        /* HEADER IGUAL AL DE INICIO */
         #header { text-align: center; padding: 20px; }
         #logo-imagen { width: 180px; }
         #titulo-container h1 { font-size: 2.5rem; margin: 10px 0; }
         #titulo-container p { color: #1abc9c; letter-spacing: 2px; }
 
+        /* NAV IGUAL AL DE INICIO */
         #nav { background: #1a252f; padding: 10px; display: flex; justify-content: center; gap: 20px; border-bottom: 2px solid #1abc9c; }
-        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        #nav a:hover { color: #1abc9c; }
+        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; }
         #nav a.active { color: #1abc9c; }
 
-        /* CONTENEDOR DE GESTIÓN */
-        .container { margin: 40px 5%; min-height: 400px; }
+        /* ESTRUCTURA ORGANIZADA */
+        .carpeta-root { margin-bottom: 30px; background: rgba(255,255,255,0.02); border-radius: 8px; padding: 15px; border: 1px solid rgba(26, 188, 156, 0.1); }
+        .titulo-c { color: #1abc9c; font-weight: bold; font-size: 1.3rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* ESTRUCTURA DE CARPETAS Y RAMAS */
-        .carpeta-root { margin-bottom: 30px; background: rgba(255,255,255,0.02); border-radius: 8px; padding: 20px; border: 1px solid rgba(26, 188, 156, 0.2); }
-        .titulo-c { color: #1abc9c; font-weight: bold; font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .rama-hijo { 
+            margin-left: 20px; 
+            border-left: 2px solid #1abc9c33; 
+            padding-left: 20px; 
+            display: block; 
+        }
         
-        .rama-hijo { margin-left: 20px; border-left: 2px solid #1abc9c33; padding-left: 20px; display: block; }
         .link-item { padding: 10px 0; position: relative; }
-        .link-item::before { content: ""; position: absolute; left: -20px; top: 20px; width: 15px; border-top: 2px solid #1abc9c33; }
+        .link-item::before {
+            content: "";
+            position: absolute;
+            left: -20px;
+            top: 20px;
+            width: 15px;
+            border-top: 2px solid #1abc9c33;
+        }
+
         .link-item a { color: #eee; text-decoration: none; font-size: 15px; transition: 0.3s; }
         .link-item a:hover { color: #1abc9c; padding-left: 5px; }
 
-        /* ZONA ADMIN */
-        .admin-zona { background: rgba(0,0,0,0.3); padding: 40px 5%; border-top: 1px solid #1a252f; margin-top: 50px; }
+        /* ADMIN */
+        .admin-zona { background: rgba(0,0,0,0.3); padding: 30px 5%; border-top: 1px solid #1a252f; margin-top: 50px; }
         .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
         input, select { background: #16212b; border: 1px solid #34495e; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
         button { background: transparent; border: 1px solid #1abc9c; color: #1abc9c; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
         button:hover { background: #1abc9c; color: #0e161d; }
 
-        /* FOOTER (Igual al Inicio) */
-        #footer { background: #0a0f14; padding: 20px; text-align: center; border-top: 1px solid #1a252f; margin-top: 50px; }
-        .btn-salir { margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+        /* FOOTER IGUAL AL DE INICIO */
+        #footer { padding: 20px; text-align: center; border-top: 1px solid #1a252f; margin-top: 50px; }
     </style>
 </head>
 <body>
-
 <div id="wrapper">
-    <!-- HEADER IGUAL AL INICIO -->
-    <header id="header">  
+    <!-- HEADER -->
+    <div id="header">  
         <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo"></div>
         <div id="titulo-container">
             <h1>SISTEMA DE GESTIÓN</h1>
-            <p>Organización y Control Eficiente</p>
+            <p>Calidad que conecta tus proyectos</p>
         </div>
-    </header>
+    </div>
 
-    <!-- NAV IGUAL AL INICIO -->
-    <nav id="nav">
+    <!-- NAVEGACIÓN -->
+    <div id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
         <a href="sistemadegestion.html" class="active">SISTEMA DE GESTIÓN</a>
         <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
-    </nav>
+    </div>
 
-    <!-- CONTENIDO DE GESTIÓN (VISOR) -->
-    <main class="container" id="visor">
-        <!-- Los datos de Firebase se cargan aquí -->
-    </main>
+    <main class="container" id="visor"></main>
 
-    <!-- SECCIÓN ADMINISTRATIVA -->
     <section class="admin-zona">
         <div class="inputs">
             <input type="text" id="rn" placeholder="Nombre de Carpeta Nueva">
@@ -83,7 +88,7 @@
 
         <div class="inputs" style="background: rgba(26, 188, 156, 0.05); padding: 20px; border-radius: 10px; border: 1px dashed #1abc9c55;">
             <select id="rd" onchange="updatePadres()"></select>
-            <select id="padreId"><option value="">Archivo Raíz (Principal)</option></select>
+            <select id="padreId"><option value="">Link Raíz (Principal)</option></select>
             <input type="text" id="fn" placeholder="Nombre del Documento">
             <input type="text" id="fl" placeholder="URL de Google Drive">
             <button onclick="saveF()">SUBIR A LA RAMA</button>
@@ -92,10 +97,10 @@
         <div id="gestion" style="display:none;"><div id="listaG"></div></div>
     </section>
 
-    <!-- FOOTER IGUAL AL INICIO -->
+    <!-- FOOTER -->
     <div id="footer">
-        <p>&copy;INCOREA-CABLES</p>
-        <button class="btn-salir" onclick="salir()">Cerrar sesión</button>
+        <p>&copy;INCOREA-CABLES </p>
+        <button onclick="salir()" style="background:none; border:1px solid #555; color:#888; padding:5px 10px; cursor:pointer;">Cerrar sesión</button>
     </div>
 </div>
 
@@ -144,7 +149,7 @@
                     `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
 
                 html += `<div class="link-item">
-                    <a href="${dLink}" target="_blank">📄 ${f.nombre}</a>
+                    <a href="${dLink}" download>📄 ${f.nombre}</a>
                     <div class="rama-hijo">
                         ${buildTree(archivos, idF)}
                     </div>
@@ -165,7 +170,7 @@
     function updatePadres() {
         const idR = document.getElementById('rd').value;
         const selectP = document.getElementById('padreId');
-        selectP.innerHTML = '<option value="">Archivo Raíz (Principal)</option>';
+        selectP.innerHTML = '<option value="">Link Raíz (Principal)</option>';
         if(idR && globalData[idR].archivos) {
             Object.keys(globalData[idR].archivos).forEach(idF => {
                 selectP.innerHTML += `<option value="${idF}">Dentro de: ${globalData[idR].archivos[idF].nombre}</option>`;
@@ -195,7 +200,7 @@
 
     function auth() { return prompt("Clave de Administrador:") === ADMIN_KEY; }
     function verG() { if(auth()) document.getElementById('gestion').style.display = "block"; }
-    
+
     function salir(){
         sessionStorage.removeItem("login");
         window.location.href = "login.html";
