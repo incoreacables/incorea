@@ -1,140 +1,205 @@
 <!DOCTYPE html>
 <html lang="es">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INCOREA CABLES</title>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-    <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Inicio</title>
-<script>
-if(sessionStorage.getItem("login") !== "ok"){
-window.location.href = "login.html";
-}
-</script>
-</head>
-</html>
-<style>
-    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0e161d; color: white; margin: 0; overflow-x: hidden; }
-    .hero-dinamico {
-        position: relative;
-        height: 600px;
-        width: 100%;
-        background: #0e161d;
-        overflow: hidden;
-       clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
-    }
-.hero-bg {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-image: linear-gradient(rgba(14, 22, 29, 0.6), rgba(14, 22, 29, 0.8)), url('imagen1.png');
-        background-size: cover;
-        background-position: center;
-        animation: zoomHero 20s infinite alternate;
-        z-index: 1;
-    }
-@keyframes zoomHero {
-        from { transform: scale(1); }
-        to { transform: scale(1.2); }
-    }
-.hero-overlay {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        text-align: center;
-        padding: 0 20px;
-    }
-.hero-overlay h2 { 
-        font-size: 60px; 
-        letter-spacing: 10px; 
-        margin: 0; 
-        text-shadow: 2px 2px 20px rgba(0,0,0,0.7);
-        animation: fadeInUp 1s ease-out;
-    }
-.hero-overlay p { 
-        font-size: 18px; 
-        color: #1abc9c; 
-        font-weight: bold; 
-        margin-top: 15px;
-        letter-spacing: 3px;
-    }
-.btn-brillante {
-        margin-top: 30px;
-        padding: 15px 40px;
-        background: #1abc9c;
-        color: #0e161d;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 50px;
-        transition: 0.3s;
-        box-shadow: 0 0 20px rgba(26, 188, 156, 0.4);
-    }
-.btn-brillante:hover {
-        background: white;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
-        transform: scale(1.05);
-    }
-@keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-.img-hero-pequena {
-        width: 150px;
-        border-radius: 10px;
-        margin-top: 20px;
-        border: 2px solid #1abc9c;
-    }
-</style>
+    <title>INCOREA CABLES - Sistema de Gestión</title>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script>
+        if(sessionStorage.getItem("login") !== "ok"){ window.location.href = "login.html"; }
+    </script>
+    <style>
+        /* ESTILOS BASE (Iguales al Inicio) */
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0e161d; color: white; margin: 0; overflow-x: hidden; }
+        
+        /* HEADER Y NAV (Copiados del primer link) */
+        #header { text-align: center; padding: 20px; }
+        #logo-imagen { width: 180px; }
+        #titulo-container h1 { font-size: 2.5rem; margin: 10px 0; }
+        #titulo-container p { color: #1abc9c; letter-spacing: 2px; }
+
+        #nav { background: #1a252f; padding: 10px; display: flex; justify-content: center; gap: 20px; border-bottom: 2px solid #1abc9c; }
+        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        #nav a:hover { color: #1abc9c; }
+        #nav a.active { color: #1abc9c; }
+
+        /* CONTENEDOR DE GESTIÓN */
+        .container { margin: 40px 5%; min-height: 400px; }
+        
+        /* ESTRUCTURA DE CARPETAS Y RAMAS */
+        .carpeta-root { margin-bottom: 30px; background: rgba(255,255,255,0.02); border-radius: 8px; padding: 20px; border: 1px solid rgba(26, 188, 156, 0.2); }
+        .titulo-c { color: #1abc9c; font-weight: bold; font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .rama-hijo { margin-left: 20px; border-left: 2px solid #1abc9c33; padding-left: 20px; display: block; }
+        .link-item { padding: 10px 0; position: relative; }
+        .link-item::before { content: ""; position: absolute; left: -20px; top: 20px; width: 15px; border-top: 2px solid #1abc9c33; }
+        .link-item a { color: #eee; text-decoration: none; font-size: 15px; transition: 0.3s; }
+        .link-item a:hover { color: #1abc9c; padding-left: 5px; }
+
+        /* ZONA ADMIN */
+        .admin-zona { background: rgba(0,0,0,0.3); padding: 40px 5%; border-top: 1px solid #1a252f; margin-top: 50px; }
+        .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
+        input, select { background: #16212b; border: 1px solid #34495e; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
+        button { background: transparent; border: 1px solid #1abc9c; color: #1abc9c; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1abc9c; color: #0e161d; }
+
+        /* FOOTER (Igual al Inicio) */
+        #footer { background: #0a0f14; padding: 20px; text-align: center; border-top: 1px solid #1a252f; margin-top: 50px; }
+        .btn-salir { margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+    </style>
 </head>
 <body>
+
 <div id="wrapper">
-    <div id="header">  
+    <!-- HEADER IGUAL AL INICIO -->
+    <header id="header">  
         <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo"></div>
-    <div id="titulo-container">
-    <h1>Calidad que conecta tus proyectos</h1>
-    <p>Estamos para ayudarte</p>
-    </div>
-    </div>
-<div id="nav">
-    <a href="index.html">INICIO</a>
-    <a href="directorio.html">DIRECTORIO</a>
-    <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-    <a href="otros.html">MAGAZINE</a>
-    <a href="contactos.html">CONTACTOS</a>
-    </div>
-    <div class="hero-dinamico">
-    <div class="hero-bg"></div> <div class="hero-overlay">
-    <h2>CONECTANDO EL FUTURO</h2>
-    <p>TECNOLOGÍA Y CALIDAD EN CADA METRO</p>
-    <img src="imagen.jpg" class="img-hero-pequena" alt="Equipo Incorea">
-<br>
-<a href="contactos.html" class="btn-brillante">DESCUBRIR MÁS</a>
-    </div>
-    </div>
-    <div id="main-container" style="padding: 80px 5%; text-align: center;">
-    <h2 style="color:#1abc9c; font-size: 32px; letter-spacing: 2px;">LÍDERES EN CONECTIVIDAD</h2>
-    <p style="color:#888; margin-bottom: 40px;">Tu mejor industria en cables aquí.</p>
-    <div class="servicios-grid">
-    </div>
-    </div>
+        <div id="titulo-container">
+            <h1>SISTEMA DE GESTIÓN</h1>
+            <p>Organización y Control Eficiente</p>
+        </div>
+    </header>
+
+    <!-- NAV IGUAL AL INICIO -->
+    <nav id="nav">
+        <a href="index.html">INICIO</a>
+        <a href="directorio.html">DIRECTORIO</a>
+        <a href="sistemadegestion.html" class="active">SISTEMA DE GESTIÓN</a>
+        <a href="otros.html">MAGAZINE</a>
+        <a href="contactos.html">CONTACTOS</a>
+    </nav>
+
+    <!-- CONTENIDO DE GESTIÓN (VISOR) -->
+    <main class="container" id="visor">
+        <!-- Los datos de Firebase se cargan aquí -->
+    </main>
+
+    <!-- SECCIÓN ADMINISTRATIVA -->
+    <section class="admin-zona">
+        <div class="inputs">
+            <input type="text" id="rn" placeholder="Nombre de Carpeta Nueva">
+            <button onclick="saveR()">+ CREAR CARPETA</button>
+        </div>
+
+        <div class="inputs" style="background: rgba(26, 188, 156, 0.05); padding: 20px; border-radius: 10px; border: 1px dashed #1abc9c55;">
+            <select id="rd" onchange="updatePadres()"></select>
+            <select id="padreId"><option value="">Archivo Raíz (Principal)</option></select>
+            <input type="text" id="fn" placeholder="Nombre del Documento">
+            <input type="text" id="fl" placeholder="URL de Google Drive">
+            <button onclick="saveF()">SUBIR A LA RAMA</button>
+            <button onclick="verG()" style="border-color:#555; color:#aaa;">ADMINISTRAR</button>
+        </div>
+        <div id="gestion" style="display:none;"><div id="listaG"></div></div>
+    </section>
+
+    <!-- FOOTER IGUAL AL INICIO -->
     <div id="footer">
-    <p>&copy;INCOREA-CABLES </p>
+        <p>&copy;INCOREA-CABLES</p>
+        <button class="btn-salir" onclick="salir()">Cerrar sesión</button>
+    </div>
 </div>
-</div>
-    <button onclick="salir()">Cerrar sesión</button>
+
 <script>
-function salir(){
-sessionStorage.removeItem("login");
-window.location.href = "login.html";
-}
+    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
+    const ADMIN_KEY = "12345";
+    let globalData = {};
+
+    window.onload = load;
+
+    async function load() {
+        try {
+            const res = await fetch(`${DB_URL}.json`);
+            globalData = await res.json() || {};
+            renderVisor();
+            renderSelects();
+        } catch (e) { console.error("Error cargando DB", e); }
+    }
+
+    function renderVisor() {
+        const visor = document.getElementById('visor');
+        visor.innerHTML = "";
+        
+        Object.keys(globalData).forEach(idR => {
+            const r = globalData[idR];
+            let html = `<div class="carpeta-root">
+                <div class="titulo-c">📂 ${r.nombre}</div>
+                <div class="rama-hijo">`;
+            
+            if(r.archivos) {
+                html += buildTree(r.archivos);
+            }
+            
+            html += `</div></div>`;
+            visor.innerHTML += html;
+        });
+    }
+
+    function buildTree(archivos, padreId = "") {
+        let html = "";
+        Object.keys(archivos).forEach(idF => {
+            const f = archivos[idF];
+            if ((f.padre || "") === padreId) {
+                let fileId = f.link.match(/[-\w]{25,}/);
+                let dLink = (fileId && f.link.includes("drive.google.com")) ? 
+                    `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+
+                html += `<div class="link-item">
+                    <a href="${dLink}" target="_blank">📄 ${f.nombre}</a>
+                    <div class="rama-hijo">
+                        ${buildTree(archivos, idF)}
+                    </div>
+                </div>`;
+            }
+        });
+        return html;
+    }
+
+    function renderSelects() {
+        const selectR = document.getElementById('rd');
+        selectR.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+        Object.keys(globalData).forEach(id => {
+            selectR.innerHTML += `<option value="${id}">${globalData[id].nombre}</option>`;
+        });
+    }
+
+    function updatePadres() {
+        const idR = document.getElementById('rd').value;
+        const selectP = document.getElementById('padreId');
+        selectP.innerHTML = '<option value="">Archivo Raíz (Principal)</option>';
+        if(idR && globalData[idR].archivos) {
+            Object.keys(globalData[idR].archivos).forEach(idF => {
+                selectP.innerHTML += `<option value="${idF}">Dentro de: ${globalData[idR].archivos[idF].nombre}</option>`;
+            });
+        }
+    }
+
+    async function saveF() {
+        const idR = document.getElementById('rd').value;
+        const pId = document.getElementById('padreId').value;
+        const n = document.getElementById('fn').value.trim();
+        const l = document.getElementById('fl').value.trim();
+        if(!idR || !n || !l || !auth()) return;
+        await fetch(`${DB_URL}/${idR}/archivos.json`, { 
+            method: 'POST', 
+            body: JSON.stringify({nombre: n, link: l, padre: pId}) 
+        });
+        load();
+    }
+
+    async function saveR() {
+        const n = document.getElementById('rn').value.trim();
+        if(!n || !auth()) return;
+        await fetch(`${DB_URL}.json`, { method: 'POST', body: JSON.stringify({nombre: n}) });
+        load();
+    }
+
+    function auth() { return prompt("Clave de Administrador:") === ADMIN_KEY; }
+    function verG() { if(auth()) document.getElementById('gestion').style.display = "block"; }
+    
+    function salir(){
+        sessionStorage.removeItem("login");
+        window.location.href = "login.html";
+    }
 </script>
 </body>
 </html>
