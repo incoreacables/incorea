@@ -31,7 +31,7 @@ if(sessionStorage.getItem("login") !== "ok"){
         width: 100%;
         background: #0e161d;
         overflow: hidden;
-        /* Esta es la forma diagonal que pediste */
+       
         clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
     }
 
@@ -97,13 +97,13 @@ if(sessionStorage.getItem("login") !== "ok"){
         transform: scale(1.05);
     }
 
-    /* Animaciones de entrada */
+
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Ajuste para la imagen pequeña del equipo */
+
     .img-hero-pequena {
         width: 150px;
         border-radius: 10px;
