@@ -6,229 +6,190 @@
     <title>INCOREA CABLES - Gestión</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
-if(sessionStorage.getItem("login") !== "ok"){
-window.location.href = "login.html";
-}
-</script>
-<style>
-       body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #0e161d; 
-            color: white; 
-            margin: 0; 
+        if(sessionStorage.getItem("login") !== "ok"){ window.location.href = "login.html"; }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0e161d; color: white; margin: 0; }
+        .container { margin: 20px 5%; min-height: 300px; }
+        
+        /* BARRA DE NAVEGACIÓN ORIGINAL */
+        #nav { 
+            background: #1a252f; 
+            padding: 10px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+            border-bottom: 2px solid #1abc9c;
         }
-.container { margin: 20px 5%; min-height: 300px; }
-        .rama { margin-bottom: 25px; }
+        #nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        #nav a:hover { color: #1abc9c; }
+
+        /* ESTILO DESPLEGABLE (ACORDEÓN) */
+        .rama { margin-bottom: 10px; background: rgba(255, 255, 255, 0.03); border-radius: 5px; overflow: hidden; }
         .rama-t { 
             color: #1abc9c; 
             font-size: 1.2rem; 
             font-weight: bold; 
-            border-bottom: 2px solid #1abc9c33; 
-            padding-bottom: 8px; 
-        }
-        .archivo { 
-            padding: 10px 0 10px 20px; 
-            border-left: 2px solid #1abc9c33; 
-            margin: 8px 0; 
+            padding: 15px; 
+            cursor: pointer; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 188, 156, 0.05);
             transition: 0.3s;
         }
-        .archivo:hover { border-left-color: #1abc9c; background: rgba(26, 188, 156, 0.05); }
-        .archivo a { color: #eee; text-decoration: none; font-size: 15px; }
-        .archivo a:hover { color: #1abc9c; }
-.admin-zona {  
-            background: rgba(255, 255, 255, 0.02);
-            padding: 30px 5%; 
-            border-top: 1px solid #1a252f;
-            margin-top: 60px; 
-        }
-        .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
-        input, select { 
-            background: #16212b; 
-            border: 1px solid #34495e; 
-            color: #fff; 
-            padding: 8px 12px; 
-            border-radius: 5px; 
-            outline: none;
-        }
-        input:focus { border-color: #1abc9c; }
-button { 
-            background: transparent; 
-            border: 1px solid #1abc9c; 
-            color: #1abc9c; 
-            padding: 8px 16px; 
-            cursor: pointer; 
-            border-radius: 5px; 
-            font-weight: bold;
-            transition: 0.3s; 
-        }
-        button:hover { background: #1abc9c; color: #0e161d; }
-        #gestion { 
+        .rama-t:hover { background: rgba(26, 188, 156, 0.1); }
+        .rama-t::after { content: '▼'; font-size: 0.8rem; opacity: 0.5; }
+        
+        .archivos-lista { 
             display: none; 
-            max-width: 900px; 
-            margin: 20px auto; 
-            background: rgba(0,0,0,0.2);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 10px 20px;
+            border-top: 1px solid rgba(26, 188, 156, 0.1);
         }
-        .edit-item { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 10px; 
-            border-bottom: 1px solid #1a252f; 
-            font-size: 13px;
-        }
+
+        .archivo { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .archivo a { color: #eee; text-decoration: none; font-size: 15px; display: block; }
+        .archivo a:hover { color: #1abc9c; }
+
+        /* PANEL ADMIN */
+        .admin-zona { background: rgba(255, 255, 255, 0.02); padding: 30px 5%; border-top: 1px solid #1a252f; margin-top: 60px; }
+        .inputs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
+        input, select { background: #16212b; border: 1px solid #34495e; color: #fff; padding: 8px 12px; border-radius: 5px; outline: none; }
+        button { background: transparent; border: 1px solid #1abc9c; color: #1abc9c; padding: 8px 16px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1abc9c; color: #0e161d; }
+        #gestion { display: none; max-width: 900px; margin: 20px auto; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; }
+        .edit-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #1a252f; font-size: 13px; }
     </style>
 </head>
 <body>
 <div id="wrapper">
-    <header id="header">
-    <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo Incorea"></div>
-    <div id="titulo-container">
-    <h1>INCOREA CABLES</h1>
-    <p>Sistema de Documentación</p>
-    </div>
+    <header id="header" style="text-align: center; padding: 20px;">
+        <div id="logo-container"><img src="logo de la empresa.png" id="logo-imagen" alt="Logo Incorea"></div>
+        <h1>INCOREA CABLES</h1>
+        <p>Sistema de Documentación</p>
     </header>
+
     <nav id="nav">
         <a href="index.html">INICIO</a>
         <a href="directorio.html">DIRECTORIO</a>
-        <a href="sistemadegestion.html">SISTEMA DE GESTIÓN</a>
-    <a href="otros.html">MAGAZINE</a>
+        <a href="sistemadegestion.html" style="color: #1abc9c;">SISTEMA DE GESTIÓN</a>
+        <a href="otros.html">MAGAZINE</a>
         <a href="contactos.html">CONTACTOS</a>
-</nav>
-<main class="container" id="visor">
-</main>
-<section class="admin-zona">
-<div class="inputs">
-        <input type="hidden" id="editIdR"> 
-        <input type="text" id="rn" placeholder="Nombre de Carpeta">
-        <button onclick="saveR()">CREAR/EDITAR CARPETA</button>
-        <button onclick="verG()" style="border-color:#555; color:#aaa;">MODO ADMINISTRADOR</button>
-</div>
-<div class="inputs">
-        <input type="hidden" id="editIdF"> 
-        <select id="rd"></select>
-        <input type="text" id="fn" placeholder="Nombre del Archivo">
-        <input type="text" id="fl" placeholder="Link de OneDrive o Drive">
-        <button onclick="saveF()">SUBIR ARCHIVO</button>
-</div>
-<div id="gestion">
-<h3 style="color:#1abc9c; text-align:center;">Panel de Control</h3>
-<div id="listaG"></div>
-</div>
-</section>
-<footer id="footer">
-<p>&copy; INCOREA CABLES</p>
-</footer>
-</div>
-<script>
-  const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
-    const ADMIN_KEY = "12345"; 
-    function clean(str) {
-    return str.replace(/[<>]/g, "").trim();
-    }
-  window.onload = load;
-  async function load() {
-  try {
-     const res = await fetch(`${DB_URL}.json`);
-     const data = await res.json();
-     const visor = document.getElementById('visor');
-     const select = document.getElementById('rd');
-     const listaG = document.getElementById('listaG');
-    
-    // LIMPIEZA PARA EVITAR DUPLICADOS
-    visor.innerHTML = ""; 
-    listaG.innerHTML = "";
-    select.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+    </nav>
 
-    if(data) {
-    Object.keys(data).forEach(idR => {
-    const r = data[idR];
-    select.innerHTML += `<option value="${idR}">${r.nombre}</option>`;                
-    let archivosHtml = "";
-    if(r.archivos) {
-    Object.keys(r.archivos).forEach(idF => {
-    const f = r.archivos[idF];
-    
-    // CAMBIO PARA DESCARGA DIRECTA DE DRIVE
-    let dLink = f.link;
-    let fileId = f.link.match(/[-\w]{25,}/);
-    if (fileId && f.link.includes("drive.google.com")) {
-        dLink = `https://drive.google.com/uc?export=download&id=${fileId[0]}`;
-    }
+    <main class="container" id="visor"></main>
 
-    archivosHtml += `
-    <div class="archivo">
-    <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
-    </div>`; 
-    listaG.innerHTML += `
-    <div class="edit-item">
-    <span>Archivo: ${f.nombre}</span>
-<div>
-<button onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">Editar</button>
-<button onclick="delF('${idR}','${idF}')" style="color:red; border-color:red;">Eliminar</button>
-</div>
-</div>`;
-});
-}
-visor.innerHTML += `
-<div class="rama">
-<div class="rama-t">${r.nombre}</div>
-${archivosHtml}
-</div>`;
-        listaG.innerHTML += `
-        <div class="edit-item" style="background:rgba(26,188,156,0.1)">
-        <strong>CARPETA: ${r.nombre}</strong>
-        <div>
-        <button onclick="upR('${idR}','${r.nombre}')">Renombrar</button>
-        <button onclick="delR('${idR}')" style="color:red; border-color:red;">Borrar Todo</button>
+    <section class="admin-zona">
+        <div class="inputs">
+            <input type="hidden" id="editIdR"> 
+            <input type="text" id="rn" placeholder="Nombre de Carpeta">
+            <button onclick="saveR()">CREAR CARPETA</button>
+            <button onclick="verG()" style="border-color:#555; color:#aaa;">MODO ADMIN</button>
         </div>
-        </div>`;
-        });
-        }
-        } catch (e) { console.error("Error cargando base de datos", e); }
-}
-function auth() {
-const pass = prompt("Introduzca clave de acceso:");
-return pass === ADMIN_KEY;
-}
-        function verG() { 
-        if(auth()) document.getElementById('gestion').style.display = "block"; 
-        }
-async function saveR() {
-        const id = document.getElementById('editIdR').value;
-        const n = clean(document.getElementById('rn').value);
-        if(!n) return alert("Nombre obligatorio");
-        if(!auth()) return;
-        
-        const method = id ? 'PATCH' : 'POST';
-        const url = id ? `${DB_URL}/${id}.json` : `${DB_URL}.json`;
-        await fetch(url, { method, body: JSON.stringify({nombre: n}) });
-        reset(); load();
-        }
-async function saveF() {
+        <div class="inputs">
+            <input type="hidden" id="editIdF"> 
+            <select id="rd"></select>
+            <input type="text" id="fn" placeholder="Nombre del Documento">
+            <input type="text" id="fl" placeholder="URL de Google Drive">
+            <button onclick="saveF()">SUBIR ARCHIVO</button>
+        </div>
+        <div id="gestion"><div id="listaG"></div></div>
+    </section>
+</div>
+
+<script>
+    const DB_URL = "https://httpsincorea-cables-default-rtdb.firebaseio.com/sistemaServicios";
+    const ADMIN_KEY = "12345"; 
+
+    function clean(str) { return str ? str.replace(/[<>]/g, "").trim() : ""; }
+    window.onload = load;
+
+    // Función para el desplazamiento (abrir/cerrar)
+    function toggleRama(elemento) {
+        const lista = elemento.nextElementSibling;
+        const estaAbierto = lista.style.display === "block";
+        lista.style.display = estaAbierto ? "none" : "block";
+    }
+
+    async function load() {
+        try {
+            const res = await fetch(`${DB_URL}.json`);
+            const data = await res.json();
+            const visor = document.getElementById('visor');
+            const select = document.getElementById('rd');
+            const listaG = document.getElementById('listaG');
+
+            visor.innerHTML = ""; listaG.innerHTML = "";
+            select.innerHTML = '<option value="">Seleccionar Carpeta...</option>';
+
+            if(data) {
+                Object.keys(data).forEach(idR => {
+                    const r = data[idR];
+                    select.innerHTML += `<option value="${idR}">${r.nombre}</option>`;                
+                    
+                    let archivosHtml = "";
+                    if(r.archivos) {
+                        Object.keys(r.archivos).forEach(idF => {
+                            const f = r.archivos[idF];
+                            let fileId = f.link.match(/[-\w]{25,}/);
+                            let dLink = (fileId && f.link.includes("drive.google.com")) ? 
+                                `https://drive.google.com/uc?export=download&id=${fileId[0]}` : f.link;
+
+                            archivosHtml += `
+                                <div class="archivo">
+                                    <a href="${dLink}" download="${f.nombre}.pdf">📄 ${f.nombre}</a>
+                                </div>`; 
+
+                            listaG.innerHTML += `
+                                <div class="edit-item">
+                                    <span>${f.nombre}</span>
+                                    <div>
+                                        <button onclick="upF('${idR}','${idF}','${f.nombre}','${f.link}')">✏️</button>
+                                        <button onclick="delF('${idR}','${idF}')" style="color:red; border-color:red;">🗑️</button>
+                                    </div>
+                                </div>`;
+                        });
+                    }
+
+                    visor.innerHTML += `
+                        <div class="rama">
+                            <div class="rama-t" onclick="toggleRama(this)">${r.nombre}</div>
+                            <div class="archivos-lista">${archivosHtml || '<p style="font-size:12px; opacity:0.5;">Carpeta vacía</p>'}</div>
+                        </div>`;
+                });
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    async function saveF() {
         const idR = document.getElementById('rd').value;
         const idF = document.getElementById('editIdF').value;
         const n = clean(document.getElementById('fn').value);
         const l = clean(document.getElementById('fl').value);
-        if(!idR || !n || !l) return alert("Faltan datos");
-        if(!auth()) return;
-        const method = idF ? 'PATCH' : 'POST';
+        if(!idR || !n || !l || !auth()) return alert("Faltan datos");
         const url = idF ? `${DB_URL}/${idR}/archivos/${idF}.json` : `${DB_URL}/${idR}/archivos.json`;
-        await fetch(url, { method, body: JSON.stringify({nombre: n, link: l}) });
+        await fetch(url, { method: idF ? 'PATCH' : 'POST', body: JSON.stringify({nombre: n, link: l}) });
         reset(); load();
     }
-function reset() {
-document.querySelectorAll('input').forEach(i => i.value = "");
+
+    async function saveR() {
+        const n = clean(document.getElementById('rn').value);
+        if(!n || !auth()) return;
+        await fetch(`${DB_URL}.json`, { method: 'POST', body: JSON.stringify({nombre: n}) });
+        reset(); load();
     }
-function upR(id, n) { document.getElementById('editIdR').value = id; document.getElementById('rn').value = n; }
-function upF(idR, idF, n, l) { 
+
+    function auth() { const p = prompt("Clave:"); return p === ADMIN_KEY; }
+    function verG() { if(auth()) document.getElementById('gestion').style.display = "block"; }
+    function reset() { document.querySelectorAll('input').forEach(i => i.value = ""); }
+    function upF(idR, idF, n, l) { 
         document.getElementById('rd').value = idR; 
         document.getElementById('editIdF').value = idF; 
         document.getElementById('fn').value = n; 
         document.getElementById('fl').value = l; 
     }
-    async function delR(id) { if(confirm("¿Borrar carpeta?") && auth()) { await fetch(`${DB_URL}/${id}.json`, { method:'DELETE' }); load(); } }
-    async function delF(idR, idF) { if(confirm("¿Borrar archivo?") && auth()) { await fetch(`${DB_URL}/${idR}/archivos/${idF}.json`, { method:'DELETE' }); load(); } }
+    async function delR(id) { if(confirm("¿Borrar?") && auth()) { await fetch(`${DB_URL}/${id}.json`, { method:'DELETE' }); load(); } }
+    async function delF(idR, idF) { if(confirm("¿Borrar?") && auth()) { await fetch(`${DB_URL}/${idR}/archivos/${idF}.json`, { method:'DELETE' }); load(); } }
 </script>
 </body>
 </html>
