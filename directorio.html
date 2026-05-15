@@ -6,7 +6,7 @@
     <title>INCOREA CABLES - DIRECTORIO</title>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
-        /* Mantenemos tu diseño original */
+        
         .visor-directo-container {
             margin: 30px 5%;
             background: rgba(17, 29, 40, 0.75);
@@ -83,15 +83,11 @@ if(sessionStorage.getItem("login") !== "ok"){
 </div>
 
 <script>
-    /**
-     * TRUCO PARA ACTUALIZAR EL EXCEL:
-     * Este código añade un número único al final de la URL cada vez que abres la página.
-     * Así OneDrive piensa que es una petición nueva y te muestra los datos reales.
-     */
+    
     window.onload = function() {
         var iframe = document.getElementById('excelFrame');
         var originalSrc = iframe.src;
-        // Añadimos un "timestamp" para romper el caché
+     
         iframe.src = originalSrc + "&refresh=" + new Date().getTime();
     };
 </script>
